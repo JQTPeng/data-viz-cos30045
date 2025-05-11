@@ -42,6 +42,8 @@ function choropleth() {
         }
 
         color.domain([d3.min(dataset, d => d.value), d3.max(dataset, d => d.value)])
+        const bins = color.range().map(c => color.invertExtent(c));
+        console.log(bins);
         geoJson = await d3.json("./resources/json/countries.json").then((json) => dataset_to_geoJson(dataset, json));
         projection
             .scale(1000)
@@ -80,7 +82,7 @@ function choropleth() {
         selection
             .on("mouseover.tooltip", (event, data) => {
                 if (data.properties.value === undefined) return;
-                setToolTip(data.properties.tooltip, `${event.clientX + 20}px`, `${event.clientY + 20}px`);
+                setToolTip_relative_client(data.properties.tooltip, event.clientX, event.clientY, 20);
             })
             .on("mouseover.highlight", (event, data) => {
                 if (data.properties.value === undefined) return;
@@ -117,26 +119,29 @@ function choropleth() {
     /**
      * Renders the tooltip relative to given position
      * @param {string} tooltip 
-     * @param {string} left px
-     * @param {string} top px
+     * @param {number} left px - clientX
+     * @param {number} top px - clientY
+     * @param {number} offset px - relative to client
      */
-    function setToolTip(tooltip, left, top) {
+    function setToolTip_relative_client(tooltip, left, top, offset) {
         d3.select("body")
             .append("div")
             .attr("id", "tooltip")
-            .style("width", "max-content")
             .style("height", "max-content")
+            .style("width", "max-content")
+            .style("left", `${left + offset}px`)
+            .style("top", `${top + offset}px`)
+            .style("position", "absolute")
+            .style("background", "white")
+            .style("opacity", "0")
             .html(tooltip)
             .transition()
             .duration(100)
-            .delay(100)
-            .style("left", left)
-            .style("top", top)
-            .style("position", "absolute")
-            .style("background", "white")
-            .style("border-radius", "10px")
-            .style("border", "1px solid grey")
-            .style("padding", "10px")
+            .delay(50)
+            .style("left", `${left + offset}px`)
+            .style("top", `${top + offset}px`)
+            .style("opacity", "1")
+
     }
 
     /**

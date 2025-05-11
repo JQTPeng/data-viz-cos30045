@@ -15,11 +15,19 @@ async function initCharts() {
         delete d.country;
         d.value = +d.value;
         d.tooltip = `
-            <p><strong>${d.name}</strong> <i>${d.year}</i></p>
-            <hr>
-            <p><strong>${d.value}</strong> ${d.measure}</p>
+            <div id="tooltip-header">
+                <span id="tooltip-header-name">${d.name}</span>
+                <span id="tooltip-header-year">${d.year}</span>
+            </div>
+            <div id="tooltip-content">
+                <div id="tooltip-content-value">${d.value}</div>
+                <div id="tooltip-content-measure">${d.measure}</div>
+            </div>
         `;
     });
+
+    console.log(d3.max(main_dataset, d => d.value))
+    console.log(d3.min(main_dataset, d => d.value))
 
     const mortality_datasets = {
         y2015: d3.group(main_dataset, d => d.year == 2015 && d.sex === "Total").get(true),

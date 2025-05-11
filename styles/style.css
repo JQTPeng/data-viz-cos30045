@@ -1,3 +1,33 @@
+* {
+    font-size: 16px;
+}
 body {
     font-family: Roboto, "Helvetica Neue", Helvetica, Arial, sans-serif;
+}
+
+#tooltip {
+    box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.3);
+}
+
+#tooltip-header {
+    padding: 10px 10px 10px 10px;
+    border-bottom: 1px solid rgb(204, 204, 204);
+}
+
+#tooltip-header-name {
+    font-weight: bold;
+}
+
+#tooltip-header-year {
+    font-style: italic;
+    font-size: 0.8em;
+}
+
+#tooltip-content {
+    padding: 10px 10px 10px 10px;
+}
+
+#tooltip-content-value {
+    color: brown;
+    font-weight: bold;
 }
