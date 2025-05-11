@@ -47,14 +47,14 @@ async function initCharts() {
         y2022_f: d3.group(main_dataset, d => d.year == 2022 && d.sex === "Female").get(true),
     }
 
-    const myChart = choropleth();
+    const choropleth_chart = choropleth();
     const selection = document.getElementById("choropleth");
-    myChart.dataset(mortality_datasets.y2015);
-    myChart(selection);
+    choropleth_chart.dataset(mortality_datasets.y2015);
+    choropleth_chart(selection);
 
     d3.select("#btnChange").on("click", () => {
-        myChart.dataset(mortality_datasets.y2017);
-        myChart(selection);
+        choropleth_chart.dataset(mortality_datasets.y2017);
+        choropleth_chart(selection);
     })
 
     /**
