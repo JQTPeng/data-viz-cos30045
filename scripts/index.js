@@ -2,7 +2,7 @@
 // TODO: Add slider
 
 
-import { choropleth } from "./charts/worldmap.js";
+import { choropleth } from "./charts.js";
 
 async function initCharts() {
     /**
@@ -15,8 +15,9 @@ async function initCharts() {
         delete d.country;
         d.value = +d.value;
         d.tooltip = `
-            <p><strong>${d.name}</strong> ${d.year}</p>
-            <p>${d.value} ${d.measure}</p>
+            <p><strong>${d.name}</strong> <i>${d.year}</i></p>
+            <hr>
+            <p><strong>${d.value}</strong> ${d.measure}</p>
         `;
     });
 
