@@ -120,13 +120,15 @@ export function choropleth() {
                     .style("border", "1px solid grey")
                     .style("padding", "10px")
             })
-            .on("mouseover.highlight", (event) => {
+            .on("mouseover.highlight", (event, data) => {
+                if (data.properties.value === undefined) return;
                 d3.select(event.target)
                     .raise()
                     .style("stroke", "black")
                     .style("stroke-width", 2)
             })
-            .on("mouseout.reset", (event) => {
+            .on("mouseout.reset", (event, data) => {
+                if (data.properties.value === undefined) return;
                 d3.select("#tooltip").remove();
                 resetPathOrder();
                 d3.select(event.target)
