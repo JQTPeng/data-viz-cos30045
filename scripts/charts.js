@@ -1,7 +1,18 @@
-// TODO: Add density legend scale
 // TODO: Title & Caption, etc options
 // TODO: colorConfig requires domain. Requires initial data
 
+
+/**
+ * Choropleth Chart
+ * -------------------------
+ * @property width, height, padding, dataset, colorConfig
+ * @feature
+ * - Method chaining to customize properties
+ * - Can include custom tooltip HTML component
+ * - Can iclude custom color configuration
+ * - Pass new data to choropleth(data) for easy updates
+ * @returns chart
+ */
 function choropleth() {
     const projection = d3.geoMercator();
     const path = d3.geoPath()
@@ -42,21 +53,24 @@ function choropleth() {
     let dataset = [];
 
     /**
-    * Renders the choropleth chart inside the given selection.
-    * This function will append an SVG element to the selected DOM element and draw the map based on data.
-    * @description Use this function for enter, updates and exits.
-    * @param {d3.Selection} selection - The D3 selection (e.g., a div or another DOM element) where the chart will be rendered.
+    * Render chart on HTML selection
+    * ------------------------------
+    * @description This function will append an 
+    * SVG element to the selected DOM element 
+    * and draw the map based on data.
+    * Use this function for enter, updates and exits.
+    * @param {HTMLElement} selection - The D3 selection/HTML (e.g., a div or another DOM element) where the chart will be rendered.
     */
     async function chart(selection) {
         svg = d3.select(selection).select("svg");
         if (svg.empty()) {
-            svg = d3.select(selection).append("svg").attr("width", width).attr("height", height)
+            svg = d3.select(selection).append("svg").attr("width", width).attr("height", height);
         }
 
         geoJson = await d3.json("./resources/json/countries.json").then((json) => dataset_to_geoJson(dataset, json));
         projection.scale(100).translate([width / 2, height / 1.5]);
         path.projection(projection);
-        colorScale = setColorScale();
+        colorScale = colorConfig.scale.domain(colorConfig.domain).range(colorConfig.range);
 
         /**
          * setup base layer/group that will be used 
@@ -95,20 +109,15 @@ function choropleth() {
                     .duration(300)
                     .call(setStyles),
                 exit => exit.remove()
-            )
+            );
 
         svg.call(zoom);
         setLegendScale(); // NOT UPDATED FOR COLOR (e.g., colorConfig change)
     }
 
-    function setColorScale() {
-        return colorConfig.scale
-            .domain(colorConfig.domain)
-            .range(colorConfig.range);
-    }
-
     /**
     * Sets event handlers for the selection
+    * -------------------------------------
     * @param {d3.Selection} selection - A D3 selection of SVG elements.
     */
     function setEvents(selection) {
@@ -142,6 +151,7 @@ function choropleth() {
 
     /**
     * Sets fill and stroke styles countries.
+    * --------------------------------------
     * @param {d3.Selection} selection - A D3 selection of SVG elements.
     */
     function setStyles(selection) {
@@ -157,6 +167,7 @@ function choropleth() {
 
     /**
      * Renders the tooltip relative to given position
+     * ----------------------------------------------
      * @param {string} tooltip 
      * @param {number} left px - clientX
      * @param {number} top px - clientY
@@ -195,15 +206,26 @@ function choropleth() {
             .attr("flood-color", "black")
             .attr("flood-opacity", 0.5);
 
-        // Render legend scale
+        /**
+         * Render the legend scale container, colors and texts
+         * NOTE: Fixed to Classed Legend (or Binned Legend)
+         */
         const threshold_height = 30;
         const threshold_width = 20;
-        let colorRange = [...colorConfig.range];
-        let colorTexts = [...colorConfig.domain];
+        const colorRange = [...colorConfig.range];
+        const colorTexts = [...colorConfig.domain];
+
+        let start = 0;
+        for (let i = 0; i < colorTexts.length; i++) {
+            let end = colorTexts[i];
+            colorTexts[i] = `${start} - ${end}`;
+            start = end + 1;
+        }
+
         colorRange.unshift(colorConfig.no_data);
         colorTexts.unshift("No data");
         const legend_height = colorRange.length * threshold_height + padding * 2;
-        const legend_width = threshold_width + 100;
+        const legend_width = threshold_width + 150; // hardcoded
         const legend_group = svg.append("g");
 
         legend_group // container box
@@ -233,16 +255,16 @@ function choropleth() {
             .data(colorTexts)
             .enter()
             .append("text")
-            .attr("y", padding + legend_height)
-            .attr("x", (d, i) => width - padding - (colorTexts.length - i) * legend_width)
+            .attr("x", (d, i) => padding * 3 + 5) // add n to adjust position slightly to right
+            .attr("y", (d, i) => height - padding * 2 - (colorTexts.length - i) * threshold_height + 20) // hardcoded
             .style("font-size", "0.8em")
             .style("color", "black")
-            .style("text-anchor", "middle")
             .text(d => d);
     }
 
     /**
      * Crucial function to make sure the update transition is smooth
+     * -------------------------------------------------------------
      * @description Resets the order of path elements in the parent node
      */
     function resetPathOrder() {
@@ -260,7 +282,9 @@ function choropleth() {
     }
 
     /**
-     * Maps values associated to each country in geoJson
+     * Mapping function to geoJson
+     * ---------------------------
+     * @description Maps values associated to each country in geoJson
      * and returns the updated geoJson
      * @param {dataset} dataset 
      * @param {geoJson} geoJson 
@@ -281,8 +305,10 @@ function choropleth() {
     }
 
     /**
+     * Gets or sets colorConfig 
+     * -----------------------------------
      * @description WARNING: Must include all properties when setting. Gets or sets custom coloring scale. 
-     * @param {colorConfig} _ The config to set. If omitted, use default scaling.
+     * @param {colorConfig} [value] The config to set. If omitted, use default scaling.
      * @returns {colorConfig|function} Returns current colorConfig if no arguments are passed.
      * Otherwise, returns the chart function for method chaining
      */
@@ -294,8 +320,9 @@ function choropleth() {
 
     /**
     * Gets or sets the dataset of the chart.
+    * -----------------------------------
     * @function
-    * @param {dataset} [_] - The dataset to set. If omitted, the current dataset is returned.
+    * @param {dataset} [value] - The dataset to set. If omitted, the current dataset is returned.
     * @returns {dataset|function} Returns the current dataset if no arguments are passed.
     * Otherwise, returns the chart function for method chaining.
     */
@@ -307,6 +334,7 @@ function choropleth() {
 
     /**
     * Gets or sets the width of the chart.
+    * -----------------------------------
     * @function
     * @param {number} [value] - The width in pixels. If no value is provided, returns the current width.
     * @returns {number|function} Returns the current width if no arguments are passed.
@@ -320,6 +348,7 @@ function choropleth() {
 
     /**
      * Gets or sets the height of the chart
+     * -----------------------------------
      * @function
      * @param {number} [value] - The height in pixels. If no value is provided, returns the current height.
      * @returns {number|function} Returns the current height if no arguments are passed.
@@ -333,6 +362,7 @@ function choropleth() {
 
     /**
      * Gets or sets the padding of the chart
+     * -----------------------------------
      * @function
      * @param {number} [value] - The padding in pixels. If no value is provided, returns the current padding.
      * @returns {number|function} Returns the current padding if no arguments are passed.
