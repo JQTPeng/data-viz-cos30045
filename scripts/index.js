@@ -4,11 +4,13 @@
 
 import { choropleth } from "./charts.js";
 
-async function initCharts() {
-    /**
-     * Instantiate a choropleth map visualization for mortality data.
-     * @description Mortality per 100,000 inhabitants - World Choropleth
-    */
+/**
+ * Instantiate a choropleth map visualization for mortality data.
+ * - Data (e.g., csv) has been cleaned beforehand to reduce file size
+ * - Preprocessing on initial load for sharing
+ * @description Mortality per 100,000 inhabitants - World Choropleth
+*/
+async function mortality_choropleth() {
     const main_dataset = await d3.csv("./resources/data/OECD_Cause_of_Mortality.csv");
     main_dataset.forEach(d => {
         d.name = d.country;
@@ -20,8 +22,8 @@ async function initCharts() {
                 <span id="tooltip-header-year">${d.year}</span>
             </div>
             <div id="tooltip-content">
-                <div id="tooltip-content-value">${d.value}</div>
-                <div id="tooltip-content-measure">${d.measure}</div>
+                <span id="tooltip-content-value">${d.value}</span>
+                <span id="tooltip-content-measure">${d.measure}</span>
             </div>
         `;
     });
@@ -58,14 +60,34 @@ async function initCharts() {
 
     const choropleth_chart = choropleth();
     const selection = document.getElementById("choropleth");
-    choropleth_chart.dataset(mortality_datasets.y2015);
+
+    // Setup custom settings
+    const domainThresholds = [799, 1199, 1599, 1999, 2400];
+    const colorThreashold = ["#fcae91", "#fb6a4a", "#ef3b2c", "#b1121b", "#67000d"];
+
+    choropleth_chart
+        .width(850)
+        .height(650)
+        .dataset(mortality_datasets.y2017)
+        .colorConfig({
+            no_data: "grey",
+            border: "grey",
+            highlightBorder: "#800000",
+            domain: domainThresholds,
+            range: colorThreashold,
+            scale: d3.scaleThreshold().domain(domainThresholds).range(colorThreashold)
+        })
+
     choropleth_chart(selection);
 
     d3.select("#btnChange").on("click", () => {
-        choropleth_chart.dataset(mortality_datasets.y2017);
+        choropleth_chart.dataset(mortality_datasets.y2015)
         choropleth_chart(selection);
     })
+}
 
+function initCharts() {
+    mortality_choropleth();
     /**
      * Instantiate a line graph visualization for death and birth rate
      * @description rate per 100,000 inhabitants in Australia

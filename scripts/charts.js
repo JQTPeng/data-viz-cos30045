@@ -1,27 +1,45 @@
 // TODO: Add density legend scale
 // TODO: Title & Caption, etc options
+// TODO: colorConfig requires domain. Requires initial data
 
 function choropleth() {
     const projection = d3.geoMercator();
     const path = d3.geoPath()
-    const color = d3.scaleQuantize().range(["#fcae91", "#fb6a4a", "#ef3b2c", "#b1121b", "#67000d"]);
     let svg = null;
+    let width = 500;
+    let height = 500;
+    let padding = 20;
 
-    let width = 1000;
-    let height = 1000;
-    let padding = 10;
+    /**
+     * @type {Object}
+     * @description A data holder for TopJSON or GeoJSON geographical data files. 
+    */
+    let geoJson = {};
 
-    /** 
+    /**
+     * @type {Function} d3 scale function
+     * @description to share between functions
+     */
+    let colorScale = null;
+
+    /**
+     * @type {{highlight: string, domain: number[], range: Array, scale: Function}}
+     * @description for custom configuration, otherwise use default
+     */
+    let colorConfig = {
+        no_data: "#999",
+        border: "white",
+        highlightBorder: "black",
+        domain: [],
+        range: ["#deebf7", "#9ecae1", "#6baed6", "#3182bd", "#08519c"],
+        scale: d3.scaleThreshold()
+    };
+
+    /** e
      * @type {Array<{name: string, year: number, value: number, measure: string, tooltip: string}>}
      * @description An array of the specified object scheme
      */
     let dataset = [];
-
-    /**
-    * @type {Object}
-    * @description A data holder for TopJSON or GeoJSON geographical data files. 
-    */
-    let geoJson = {};
 
     /**
     * Renders the choropleth chart inside the given selection.
@@ -30,7 +48,6 @@ function choropleth() {
     * @param {d3.Selection} selection - The D3 selection (e.g., a div or another DOM element) where the chart will be rendered.
     */
     async function chart(selection) {
-        // console.log(dataset); DEBUG
         svg = d3.select(selection).select("svg");
 
         if (svg.empty()) {
@@ -38,40 +55,70 @@ function choropleth() {
                 .append("svg")
                 .attr("width", width)
                 .attr("height", height)
-                .attr("fill", "white");
         }
 
-        color.domain([d3.min(dataset, d => d.value), d3.max(dataset, d => d.value)])
-        const bins = color.range().map(c => color.invertExtent(c));
-        console.log(bins);
+        colorScale = setColorScale();
         geoJson = await d3.json("./resources/json/countries.json").then((json) => dataset_to_geoJson(dataset, json));
         projection
-            .scale(1000)
-            .fitExtent([[padding, padding], [width - padding, height - padding]], geoJson);
+            .scale(100)
+            .translate([width / 2, height / 1.5]);
+        // .fitExtent([[padding, padding], [width - padding, height - padding]], geoJson);
         path.projection(projection);
 
-        console.log(geoJson.features)
-        // create path
-        svg.selectAll("path")
+        let zoomGroup = svg.select("#zoomGroup");
+        if (zoomGroup.empty()) {
+            zoomGroup = svg.append("g").attr("id", "zoomGroup");
+        }
+
+        const zoom = d3.zoom()
+            .scaleExtent([1, 8]) // zoom limits
+            .on("zoom", (event) => {
+                zoomGroup.attr("transform", event.transform);
+            });
+        console.log(colorConfig.range);
+        zoomGroup
+            .selectAll("path")
             .data(geoJson.features)
             .join(
                 enter => enter
                     .append("path")
                     .attr("id", d => d.properties.name.trim().replace(/\s/g, ''))
                     .attr("d", path)
+                    .call(setStyles)
+                    .call(setEvents)
+                    .style("opacity", "0")
+                    .transition()
+                    .duration(300)
+                    .delay(30)
+                    .style("opacity", "1"),
+                update => update
+                    .attr("d", path)
                     .call(setEvents)
                     .transition()
                     .duration(300)
-                    .delay(50)
-                    .call(setStyles),
-                update => update
-                    .attr("d", path)
-                    .transition()
-                    .duration(300)
-                    .delay(50)
                     .call(setStyles),
                 exit => exit.remove()
             )
+        // .join("path")
+        // .attr("id", d => d.properties.name.trim().replace(/\s/g, ''))
+        // .attr("d", path)
+        // .call(setStyles)
+        // .call(setEvents)
+        // .style("opacity", "0")
+        // .transition()
+        // .duration(300)
+        // .delay(30)
+        // .style("opacity", "1")
+
+        svg.call(zoom);
+
+        setLegendScale(); // NOT UPDATED FOR COLOR (e.g., colorConfig change)
+    }
+
+    function setColorScale() {
+        return colorConfig.scale
+            .domain(colorConfig.domain)
+            .range(colorConfig.range);
     }
 
     /**
@@ -88,16 +135,22 @@ function choropleth() {
                 if (data.properties.value === undefined) return;
                 d3.select(event.target)
                     .raise()
-                    .style("stroke", "black")
-                    .style("stroke-width", 2)
+                    .transition()
+                    .duration(50)
+                    .delay(20)
+                    .style("stroke", colorConfig.highlightBorder)
+                    .style("stroke-width", 1.5);
             })
             .on("mouseout.reset", (event, data) => {
                 if (data.properties.value === undefined) return;
                 d3.select("#tooltip").remove();
                 resetPathOrder();
                 d3.select(event.target)
-                    .style("stroke", "white")
-                    .style("stroke-width", 1)
+                    .transition()
+                    .duration(50)
+                    .delay(20)
+                    .style("stroke", colorConfig.border)
+                    .style("stroke-width", 0.5)
             })
     }
 
@@ -109,11 +162,11 @@ function choropleth() {
         selection
             .style("fill", (d) => {
                 let value = d.properties.value;
-                if (value) { return color(value); }
-                return "#999";
+                if (value) { return colorScale(value); }
+                return colorConfig.no_data;
             })
-            .style("stroke", "white")
-            .style("stroke-width", 1)
+            .style("stroke", colorConfig.border)
+            .style("stroke-width", 0.5)
     }
 
     /**
@@ -141,12 +194,67 @@ function choropleth() {
             .style("left", `${left + offset}px`)
             .style("top", `${top + offset}px`)
             .style("opacity", "1")
+    }
 
+    function setLegendScale() {
+        // Define blur effect
+        const defs = svg.append("defs");
+
+        defs.append("filter")
+            .attr("id", "drop-shadow")
+            .append("feDropShadow")
+            .attr("dx", 0.8)            // shadow x offset
+            .attr("dy", 2)              // shadow y offset
+            .attr("stdDeviation", 2)    // blur radius
+            .attr("flood-color", "black")
+            .attr("flood-opacity", 0.5); const threshold_width = 20;
+
+        // Render legend scale
+        const threshold_height = 30;
+        let data = [...colorConfig.range];
+        data.unshift(colorConfig.no_data);
+
+        const legend_height = data.length * threshold_height + padding * 2;
+        const legend_width = threshold_width + 100;
+
+        svg.selectAll("rect") // thresholds
+            .data(colorConfig.range)
+            .enter()
+            .append("rect")
+            .attr("width", threshold_width + "px")
+            .attr("height", threshold_height + "px")
+            .attr("fill", (d) => d)
+            .attr("x", (d, i) => padding)
+            .attr("y", (d, i) => height - padding - (data.length - i) * threshold_height);
+
+        svg.append("rect") // container box
+            .attr("x", padding)
+            .attr("y", height - legend_height - padding)
+            .attr("height", legend_height)
+            .attr("width", legend_width)
+            .attr("fill", "white")
+            .attr("filter", "url(#drop-shadow)");
+
+        data = [...colorConfig.domain];
+        data.unshift("No data");
+
+        svg.selectAll("text") // range text
+            .data(data)
+            .enter()
+            .append("text")
+            .attr("y", padding + legend_height)
+            .attr("x", (d, i) => {
+                return width - padding - (data.length - i) * legend_width
+            })
+            .style("font-size", "0.8em")
+            .style("color", "black")
+            .style("text-anchor", "middle")
+            .text(d => d);
     }
 
     /**
      * Crucial function to make sure the update transition is smooth
-     * @description Resets the order of path elements in the SVG DOM 
+     * @description Resets the order of path elements in the parent node
      */
     function resetPathOrder() {
         let count = 0;
@@ -155,7 +263,7 @@ function choropleth() {
             const elementToMove = svg.select(`#${name}`).node();
             if (elementToMove) {
                 count++;
-                svg.node().appendChild(elementToMove);
+                svg.select("#zoomGroup").node().appendChild(elementToMove);
             } else {
                 console.warn(`Element with ID "${name}" not found.`);
             }
@@ -181,6 +289,18 @@ function choropleth() {
             }
         }
         return geoJson;
+    }
+
+    /**
+     * @description WARNING: Must include all properties when setting. Gets or sets custom coloring scale. 
+     * @param {colorConfig} _ The config to set. If omitted, use default scaling.
+     * @returns {colorConfig|function} Returns current colorConfig if no arguments are passed.
+     * Otherwise, returns the chart function for method chaining
+     */
+    chart.colorConfig = function (_) {
+        if (!arguments.length) return colorConfig;
+        colorConfig = _;
+        return chart;
     }
 
     /**
