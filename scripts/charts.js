@@ -225,7 +225,7 @@ function choropleth() {
         colorRange.unshift(colorConfig.no_data);
         colorTexts.unshift("No data");
         const legend_height = colorRange.length * threshold_height + padding * 2;
-        const legend_width = threshold_width + 150; // hardcoded
+        const legend_width = threshold_width + 110; // hardcoded
         const legend_group = svg.append("g");
 
         legend_group // container box
