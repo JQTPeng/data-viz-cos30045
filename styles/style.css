@@ -5,6 +5,12 @@ body {
     font-family: Roboto, "Helvetica Neue", Helvetica, Arial, sans-serif;
 }
 
+#choropleth {
+    border: 1px solid #ccc;
+    margin: auto;
+    overflow: hidden;
+}
+
 #tooltip {
     box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.3);
 }
@@ -30,4 +36,8 @@ body {
 #tooltip-content-value {
     color: brown;
     font-weight: bold;
+}
+
+#tooltip-content-measure {
+    font-size: 0.8em;
 }
