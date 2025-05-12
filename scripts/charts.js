@@ -49,33 +49,30 @@ function choropleth() {
     */
     async function chart(selection) {
         svg = d3.select(selection).select("svg");
-
         if (svg.empty()) {
-            svg = d3.select(selection)
-                .append("svg")
-                .attr("width", width)
-                .attr("height", height)
+            svg = d3.select(selection).append("svg").attr("width", width).attr("height", height)
         }
 
-        colorScale = setColorScale();
         geoJson = await d3.json("./resources/json/countries.json").then((json) => dataset_to_geoJson(dataset, json));
-        projection
-            .scale(100)
-            .translate([width / 2, height / 1.5]);
-        // .fitExtent([[padding, padding], [width - padding, height - padding]], geoJson);
+        projection.scale(100).translate([width / 2, height / 1.5]);
         path.projection(projection);
+        colorScale = setColorScale();
+
+        /**
+         * setup base layer/group that will be used 
+         * to zoom and draw the map. Legend scales and other 
+         * components are drawn on the layer before unless decided
+         */
 
         let zoomGroup = svg.select("#zoomGroup");
         if (zoomGroup.empty()) {
             zoomGroup = svg.append("g").attr("id", "zoomGroup");
         }
 
-        const zoom = d3.zoom()
-            .scaleExtent([1, 8]) // zoom limits
-            .on("zoom", (event) => {
-                zoomGroup.attr("transform", event.transform);
-            });
-        console.log(colorConfig.range);
+        const zoom = d3.zoom().scaleExtent([1, 8]).on("zoom", (event) => {
+            zoomGroup.attr("transform", event.transform);
+        });
+
         zoomGroup
             .selectAll("path")
             .data(geoJson.features)
@@ -99,19 +96,8 @@ function choropleth() {
                     .call(setStyles),
                 exit => exit.remove()
             )
-        // .join("path")
-        // .attr("id", d => d.properties.name.trim().replace(/\s/g, ''))
-        // .attr("d", path)
-        // .call(setStyles)
-        // .call(setEvents)
-        // .style("opacity", "0")
-        // .transition()
-        // .duration(300)
-        // .delay(30)
-        // .style("opacity", "1")
 
         svg.call(zoom);
-
         setLegendScale(); // NOT UPDATED FOR COLOR (e.g., colorConfig change)
     }
 
@@ -207,27 +193,21 @@ function choropleth() {
             .attr("dy", 2)              // shadow y offset
             .attr("stdDeviation", 2)    // blur radius
             .attr("flood-color", "black")
-            .attr("flood-opacity", 0.5); const threshold_width = 20;
+            .attr("flood-opacity", 0.5);
 
         // Render legend scale
         const threshold_height = 30;
-        let data = [...colorConfig.range];
-        data.unshift(colorConfig.no_data);
-
-        const legend_height = data.length * threshold_height + padding * 2;
+        const threshold_width = 20;
+        let colorRange = [...colorConfig.range];
+        let colorTexts = [...colorConfig.domain];
+        colorRange.unshift(colorConfig.no_data);
+        colorTexts.unshift("No data");
+        const legend_height = colorRange.length * threshold_height + padding * 2;
         const legend_width = threshold_width + 100;
+        const legend_group = svg.append("g");
 
-        svg.selectAll("rect") // thresholds
-            .data(colorConfig.range)
-            .enter()
+        legend_group // container box
             .append("rect")
-            .attr("width", threshold_width + "px")
-            .attr("height", threshold_height + "px")
-            .attr("fill", (d) => d)
-            .attr("x", (d, i) => padding)
-            .attr("y", (d, i) => height - padding - (data.length - i) * threshold_height);
-
-        svg.append("rect") // container box
             .attr("x", padding)
             .attr("y", height - legend_height - padding)
             .attr("height", legend_height)
@@ -235,17 +215,26 @@ function choropleth() {
             .attr("fill", "white")
             .attr("filter", "url(#drop-shadow)");
 
-        data = [...colorConfig.domain];
-        data.unshift("No data");
+        legend_group // thresholds
+            .append("g")
+            .selectAll("rect")
+            .data(colorRange)
+            .enter()
+            .append("rect")
+            .attr("width", threshold_width + "px")
+            .attr("height", threshold_height + "px")
+            .attr("fill", (d) => d)
+            .attr("x", (d, i) => padding * 2)
+            .attr("y", (d, i) => height - padding * 2 - (colorRange.length - i) * threshold_height);
 
-        svg.selectAll("text") // range text
-            .data(data)
+        legend_group // threshold texts
+            .append("g")
+            .selectAll("text")
+            .data(colorTexts)
             .enter()
             .append("text")
             .attr("y", padding + legend_height)
-            .attr("x", (d, i) => {
-                return width - padding - (data.length - i) * legend_width
-            })
+            .attr("x", (d, i) => width - padding - (colorTexts.length - i) * legend_width)
             .style("font-size", "0.8em")
             .style("color", "black")
             .style("text-anchor", "middle")
@@ -358,8 +347,4 @@ function choropleth() {
     return chart;
 }
 
-function lineChart() {
-
-}
-
-export { choropleth, lineChart };
+export { choropleth };

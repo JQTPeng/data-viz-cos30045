@@ -70,8 +70,8 @@ async function mortality_choropleth() {
         .height(650)
         .dataset(mortality_datasets.y2017)
         .colorConfig({
-            no_data: "grey",
-            border: "grey",
+            no_data: "#808080",
+            border: "#808080",
             highlightBorder: "#800000",
             domain: domainThresholds,
             range: colorThreashold,
