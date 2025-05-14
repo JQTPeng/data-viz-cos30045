@@ -1,0 +1,193 @@
+Reference area,Measure,Age,Year,Cause Code,Cause,value
+Australia,deaths per 100 000 inhabitants,Total,2022,CICDHARM,Intentional self-harm,12.7
+Australia,deaths per 100 000 inhabitants,Total,2016,CICDHARM,Intentional self-harm,12.2
+Australia,deaths per 100 000 inhabitants,Total,2017,CICDTBLS,Tuberculosis,0.2
+Australia,deaths per 100 000 inhabitants,Total,2022,CICDTBLS,Tuberculosis,0.1
+Australia,deaths per 100 000 inhabitants,Total,2022,CICDTRAC,Transport accidents,5.5
+Australia,deaths per 100 000 inhabitants,Total,2016,CICDTRAC,Transport accidents,6.3
+Australia,deaths per 100 000 inhabitants,Total,2020,CICDTBLS,Tuberculosis,0.1
+Australia,deaths per 100 000 inhabitants,Total,2017,CICDASMA,Asthma,1.9
+Australia,deaths per 100 000 inhabitants,Total,2018,CICDASMA,Asthma,1.7
+Australia,deaths per 100 000 inhabitants,Total,2019,CICDASMA,Asthma,1.8
+Australia,deaths per 100 000 inhabitants,Total,2020,CICDASMA,Asthma,1.7
+Australia,deaths per 100 000 inhabitants,Total,2021,CICDASMA,Asthma,1.4
+Australia,deaths per 100 000 inhabitants,Total,2022,CICDASMA,Asthma,1.8
+Australia,deaths per 100 000 inhabitants,Total,2021,CICDTBLS,Tuberculosis,0.2
+Australia,deaths per 100 000 inhabitants,Total,2016,CICDTBLS,Tuberculosis,0.2
+Australia,deaths per 100 000 inhabitants,Total,2018,CICDCONG,"Congenital malformations, deformations and chromosomal abnormalities",2.6
+Australia,deaths per 100 000 inhabitants,Total,2019,CICDCONG,"Congenital malformations, deformations and chromosomal abnormalities",2.8
+Australia,deaths per 100 000 inhabitants,Total,2020,CICDCONG,"Congenital malformations, deformations and chromosomal abnormalities",2.6
+Australia,deaths per 100 000 inhabitants,Total,2021,CICDCONG,"Congenital malformations, deformations and chromosomal abnormalities",2.7
+Australia,deaths per 100 000 inhabitants,Total,2022,CICDCONG,"Congenital malformations, deformations and chromosomal abnormalities",2.7
+Australia,deaths per 100 000 inhabitants,Total,2016,CICDCONG,"Congenital malformations, deformations and chromosomal abnormalities",2.4
+Australia,deaths per 100 000 inhabitants,Total,2017,CICDPNEU,Pneumonia,12.9
+Australia,deaths per 100 000 inhabitants,Total,2018,CICDPNEU,Pneumonia,11.5
+Australia,deaths per 100 000 inhabitants,Total,2019,CICDPNEU,Pneumonia,12.4
+Australia,deaths per 100 000 inhabitants,Total,2020,CICDPNEU,Pneumonia,8.2
+Australia,deaths per 100 000 inhabitants,Total,2021,CICDPNEU,Pneumonia,8
+Australia,deaths per 100 000 inhabitants,Total,2022,CICDPNEU,Pneumonia,9.2
+Australia,deaths per 100 000 inhabitants,Total,2016,CICDPNEU,Pneumonia,12.5
+Australia,deaths per 100 000 inhabitants,Total,2017,CICDSYMP,"Symptoms, signs, ill-defined causes",5.9
+Australia,deaths per 100 000 inhabitants,Total,2018,CICDSYMP,"Symptoms, signs, ill-defined causes",6.2
+Australia,deaths per 100 000 inhabitants,Total,2019,CICDSYMP,"Symptoms, signs, ill-defined causes",8.2
+Australia,deaths per 100 000 inhabitants,Total,2020,CICDSYMP,"Symptoms, signs, ill-defined causes",8.9
+Australia,deaths per 100 000 inhabitants,Total,2021,CICDSYMP,"Symptoms, signs, ill-defined causes",11
+Australia,deaths per 100 000 inhabitants,Total,2022,CICDSYMP,"Symptoms, signs, ill-defined causes",15.3
+Australia,deaths per 100 000 inhabitants,Total,2018,CICDTBLS,Tuberculosis,0.2
+Australia,deaths per 100 000 inhabitants,Total,2019,CICDTBLS,Tuberculosis,0.2
+Australia,deaths per 100 000 inhabitants,Total,2020,CICDGENI,Diseases of the genitourinary system,15.9
+Australia,deaths per 100 000 inhabitants,Total,2021,CICDGENI,Diseases of the genitourinary system,16.9
+Australia,deaths per 100 000 inhabitants,Total,2022,CICDGENI,Diseases of the genitourinary system,17.6
+Australia,deaths per 100 000 inhabitants,Total,2016,CICDGENI,Diseases of the genitourinary system,15.3
+Australia,deaths per 100 000 inhabitants,Total,2017,CICDGENI,Diseases of the genitourinary system,16
+Australia,deaths per 100 000 inhabitants,Total,2018,CICDGENI,Diseases of the genitourinary system,14.2
+Australia,deaths per 100 000 inhabitants,Total,2021,CICDCVID,Codes for special purposes: COVID-19,4.3
+Australia,deaths per 100 000 inhabitants,Total,2022,CICDCVID,Codes for special purposes: COVID-19,36.8
+Australia,deaths per 100 000 inhabitants,Total,2020,CICDCVID,Codes for special purposes: COVID-19,3.6
+Australia,deaths per 100 000 inhabitants,Total,2017,CICDPEPT,Peptic ulcer,1.1
+Australia,deaths per 100 000 inhabitants,Total,2018,CICDPEPT,Peptic ulcer,1.1
+Australia,deaths per 100 000 inhabitants,Total,2019,CICDPEPT,Peptic ulcer,1.1
+Australia,deaths per 100 000 inhabitants,Total,2020,CICDPEPT,Peptic ulcer,1
+Australia,deaths per 100 000 inhabitants,Total,2021,CICDPEPT,Peptic ulcer,1
+Australia,deaths per 100 000 inhabitants,Total,2022,CICDPEPT,Peptic ulcer,1.1
+Australia,deaths per 100 000 inhabitants,Total,2016,CICDPEPT,Peptic ulcer,1.2
+Australia,deaths per 100 000 inhabitants,Total,2017,CICDALZH,Alzheimer's disease,18.4
+Australia,deaths per 100 000 inhabitants,Total,2018,CICDALZH,Alzheimer's disease,18.4
+Australia,deaths per 100 000 inhabitants,Total,2019,CICDALZH,Alzheimer's disease,18.8
+Australia,deaths per 100 000 inhabitants,Total,2020,CICDALZH,Alzheimer's disease,19
+Australia,deaths per 100 000 inhabitants,Total,2021,CICDALZH,Alzheimer's disease,20.6
+Australia,deaths per 100 000 inhabitants,Total,2022,CICDALZH,Alzheimer's disease,20.9
+Australia,deaths per 100 000 inhabitants,Total,2016,CICDALZH,Alzheimer's disease,17.6
+Australia,deaths per 100 000 inhabitants,Total,2017,CICDDBTM,Diabetes mellitus,21
+Australia,deaths per 100 000 inhabitants,Total,2018,CICDDBTM,Diabetes mellitus,19.9
+Australia,deaths per 100 000 inhabitants,Total,2019,CICDDBTM,Diabetes mellitus,20.5
+Australia,deaths per 100 000 inhabitants,Total,2020,CICDDBTM,Diabetes mellitus,20.8
+Australia,deaths per 100 000 inhabitants,Total,2021,CICDDBTM,Diabetes mellitus,20.8
+Australia,deaths per 100 000 inhabitants,Total,2022,CICDDBTM,Diabetes mellitus,22.7
+Australia,deaths per 100 000 inhabitants,Total,2016,CICDDBTM,Diabetes mellitus,21.3
+Australia,deaths per 100 000 inhabitants,Total,2019,CICDPEAU,Diseases of the skin and subcutaneous tissue,2.6
+Australia,deaths per 100 000 inhabitants,Total,2020,CICDPEAU,Diseases of the skin and subcutaneous tissue,2.5
+Australia,deaths per 100 000 inhabitants,Total,2021,CICDPEAU,Diseases of the skin and subcutaneous tissue,2.6
+Australia,deaths per 100 000 inhabitants,Total,2022,CICDPEAU,Diseases of the skin and subcutaneous tissue,3
+Australia,deaths per 100 000 inhabitants,Total,2016,CICDPEAU,Diseases of the skin and subcutaneous tissue,2.4
+Australia,deaths per 100 000 inhabitants,Total,2017,CICDPEAU,Diseases of the skin and subcutaneous tissue,2.4
+Australia,deaths per 100 000 inhabitants,Total,2018,CICDPEAU,Diseases of the skin and subcutaneous tissue,2.5
+Australia,deaths per 100 000 inhabitants,Total,2017,CICDHARM,Intentional self-harm,13.6
+Australia,deaths per 100 000 inhabitants,Total,2018,CICDHARM,Intentional self-harm,13.1
+Australia,deaths per 100 000 inhabitants,Total,2019,CICDHARM,Intentional self-harm,13.5
+Australia,deaths per 100 000 inhabitants,Total,2020,CICDHARM,Intentional self-harm,12.6
+Australia,deaths per 100 000 inhabitants,Total,2021,CICDHARM,Intentional self-harm,12.5
+Australia,deaths per 100 000 inhabitants,Total,2016,CICDASMA,Asthma,2
+Australia,deaths per 100 000 inhabitants,Total,2017,CICDCONG,"Congenital malformations, deformations and chromosomal abnormalities",2.6
+Australia,deaths per 100 000 inhabitants,Total,2017,CICDCHUT,Accidental falls,12.1
+Australia,deaths per 100 000 inhabitants,Total,2018,CICDCHUT,Accidental falls,12.5
+Australia,deaths per 100 000 inhabitants,Total,2019,CICDCHUT,Accidental falls,13.7
+Australia,deaths per 100 000 inhabitants,Total,2020,CICDCHUT,Accidental falls,13.7
+Australia,deaths per 100 000 inhabitants,Total,2021,CICDCHUT,Accidental falls,14.6
+Australia,deaths per 100 000 inhabitants,Total,2022,CICDCHUT,Accidental falls,15.2
+Australia,deaths per 100 000 inhabitants,Total,2016,CICDCHUT,Accidental falls,12
+Australia,deaths per 100 000 inhabitants,Total,2017,CICDHIVD,HIV-AIDS,0.2
+Australia,deaths per 100 000 inhabitants,Total,2018,CICDHIVD,HIV-AIDS,0.1
+Australia,deaths per 100 000 inhabitants,Total,2019,CICDPOSN,Accidental poisoning,5.9
+Australia,deaths per 100 000 inhabitants,Total,2020,CICDPOSN,Accidental poisoning,6.1
+Australia,deaths per 100 000 inhabitants,Total,2021,CICDPOSN,Accidental poisoning,5.3
+Australia,deaths per 100 000 inhabitants,Total,2022,CICDPOSN,Accidental poisoning,5.2
+Australia,deaths per 100 000 inhabitants,Total,2016,CICDPOSN,Accidental poisoning,6.1
+Australia,deaths per 100 000 inhabitants,Total,2017,CICDPOSN,Accidental poisoning,6.3
+Australia,deaths per 100 000 inhabitants,Total,2019,CICDHIVD,HIV-AIDS,0.2
+Australia,deaths per 100 000 inhabitants,Total,2018,CICDPOSN,Accidental poisoning,6.4
+Australia,deaths per 100 000 inhabitants,Total,2020,CICDHIVD,HIV-AIDS,0.2
+Australia,deaths per 100 000 inhabitants,Total,2021,CICDHIVD,HIV-AIDS,0.1
+Australia,deaths per 100 000 inhabitants,Total,2022,CICDHIVD,HIV-AIDS,0.1
+Australia,deaths per 100 000 inhabitants,Total,2016,CICDHIVD,HIV-AIDS,0.3
+Australia,deaths per 100 000 inhabitants,Total,2017,CICDPARK,Parkinson's disease,8.1
+Australia,deaths per 100 000 inhabitants,Total,2018,CICDPARK,Parkinson's disease,8.2
+Australia,deaths per 100 000 inhabitants,Total,2019,CICDPARK,Parkinson's disease,8.7
+Australia,deaths per 100 000 inhabitants,Total,2020,CICDPARK,Parkinson's disease,8.3
+Australia,deaths per 100 000 inhabitants,Total,2021,CICDPARK,Parkinson's disease,8.9
+Australia,deaths per 100 000 inhabitants,Total,2022,CICDPARK,Parkinson's disease,9.4
+Australia,deaths per 100 000 inhabitants,Total,2016,CICDPARK,Parkinson's disease,8
+Australia,deaths per 100 000 inhabitants,Total,2017,CICDBAEM,Chronic obstructive pulmonary diseases,32.8
+Australia,deaths per 100 000 inhabitants,Total,2018,CICDBAEM,Chronic obstructive pulmonary diseases,30.4
+Australia,deaths per 100 000 inhabitants,Total,2019,CICDBAEM,Chronic obstructive pulmonary diseases,31
+Australia,deaths per 100 000 inhabitants,Total,2020,CICDBAEM,Chronic obstructive pulmonary diseases,25.4
+Australia,deaths per 100 000 inhabitants,Total,2021,CICDBAEM,Chronic obstructive pulmonary diseases,27
+Australia,deaths per 100 000 inhabitants,Total,2022,CICDBAEM,Chronic obstructive pulmonary diseases,28.7
+Australia,deaths per 100 000 inhabitants,Total,2016,CICDBAEM,Chronic obstructive pulmonary diseases,32.2
+Australia,deaths per 100 000 inhabitants,Total,2017,CICDTUME,Malignant neoplasms,196
+Australia,deaths per 100 000 inhabitants,Total,2018,CICDTUME,Malignant neoplasms,197.1
+Australia,deaths per 100 000 inhabitants,Total,2019,CICDAFFE,Certain conditions originating in the perinatal period,2
+Australia,deaths per 100 000 inhabitants,Total,2020,CICDAFFE,Certain conditions originating in the perinatal period,1.9
+Australia,deaths per 100 000 inhabitants,Total,2021,CICDAFFE,Certain conditions originating in the perinatal period,2.1
+Australia,deaths per 100 000 inhabitants,Total,2022,CICDAFFE,Certain conditions originating in the perinatal period,2
+Australia,deaths per 100 000 inhabitants,Total,2016,CICDAFFE,Certain conditions originating in the perinatal period,2.1
+Australia,deaths per 100 000 inhabitants,Total,2017,CICDAFFE,Certain conditions originating in the perinatal period,2.2
+Australia,deaths per 100 000 inhabitants,Total,2018,CICDAFFE,Certain conditions originating in the perinatal period,2
+Australia,deaths per 100 000 inhabitants,Total,2019,CICDTUME,Malignant neoplasms,199.5
+Australia,deaths per 100 000 inhabitants,Total,2020,CICDTUME,Malignant neoplasms,189
+Australia,deaths per 100 000 inhabitants,Total,2021,CICDTUME,Malignant neoplasms,190.6
+Australia,deaths per 100 000 inhabitants,Total,2022,CICDTUME,Malignant neoplasms,190
+Australia,deaths per 100 000 inhabitants,Total,2016,CICDTUME,Malignant neoplasms,201.2
+Australia,deaths per 100 000 inhabitants,Total,2017,CICDCIRR,Chronic liver diseases and cirrhosis,6
+Australia,deaths per 100 000 inhabitants,Total,2018,CICDCIRR,Chronic liver diseases and cirrhosis,6
+Australia,deaths per 100 000 inhabitants,Total,2019,CICDCIRR,Chronic liver diseases and cirrhosis,6.3
+Australia,deaths per 100 000 inhabitants,Total,2020,CICDCIRR,Chronic liver diseases and cirrhosis,6.6
+Australia,deaths per 100 000 inhabitants,Total,2021,CICDCIRR,Chronic liver diseases and cirrhosis,6.9
+Australia,deaths per 100 000 inhabitants,Total,2022,CICDCIRR,Chronic liver diseases and cirrhosis,7.7
+Australia,deaths per 100 000 inhabitants,Total,2016,CICDCIRR,Chronic liver diseases and cirrhosis,5.5
+Australia,deaths per 100 000 inhabitants,Total,2017,CICDHOCD,Assault,0.9
+Australia,deaths per 100 000 inhabitants,Total,2018,CICDHOCD,Assault,1
+Australia,deaths per 100 000 inhabitants,Total,2019,CICDHOCD,Assault,1
+Australia,deaths per 100 000 inhabitants,Total,2020,CICDHOCD,Assault,1
+Australia,deaths per 100 000 inhabitants,Total,2021,CICDHOCD,Assault,0.8
+Australia,deaths per 100 000 inhabitants,Total,2022,CICDHOCD,Assault,0.9
+Australia,deaths per 100 000 inhabitants,Total,2016,CICDHOCD,Assault,1.1
+Australia,deaths per 100 000 inhabitants,Total,2017,CICDINPN,Influenza,5.4
+Australia,deaths per 100 000 inhabitants,Total,2018,CICDINPN,Influenza,0.6
+Australia,deaths per 100 000 inhabitants,Total,2019,CICDINPN,Influenza,4.4
+Australia,deaths per 100 000 inhabitants,Total,2020,CICDINPN,Influenza,0.2
+Australia,deaths per 100 000 inhabitants,Total,2021,CICDINPN,Influenza,0
+Australia,deaths per 100 000 inhabitants,Total,2022,CICDINPN,Influenza,1.1
+Australia,deaths per 100 000 inhabitants,Total,2016,CICDINPN,Influenza,2
+Australia,deaths per 100 000 inhabitants,Total,2017,CICDOSTE,Diseases of the musculoskeletal system and connective tissue,6.2
+Australia,deaths per 100 000 inhabitants,Total,2018,CICDOSTE,Diseases of the musculoskeletal system and connective tissue,5.8
+Australia,deaths per 100 000 inhabitants,Total,2019,CICDOSTE,Diseases of the musculoskeletal system and connective tissue,5.9
+Australia,deaths per 100 000 inhabitants,Total,2020,CICDOSTE,Diseases of the musculoskeletal system and connective tissue,5.3
+Australia,deaths per 100 000 inhabitants,Total,2021,CICDOSTE,Diseases of the musculoskeletal system and connective tissue,6.2
+Australia,deaths per 100 000 inhabitants,Total,2022,CICDOSTE,Diseases of the musculoskeletal system and connective tissue,6.6
+Australia,deaths per 100 000 inhabitants,Total,2016,CICDOSTE,Diseases of the musculoskeletal system and connective tissue,6.2
+Australia,deaths per 100 000 inhabitants,Total,2017,CICDISCH,Ischaemic heart diseases,80.5
+Australia,deaths per 100 000 inhabitants,Total,2018,CICDISCH,Ischaemic heart diseases,74.7
+Australia,deaths per 100 000 inhabitants,Total,2019,CICDISCH,Ischaemic heart diseases,75.4
+Australia,deaths per 100 000 inhabitants,Total,2020,CICDISCH,Ischaemic heart diseases,66.7
+Australia,deaths per 100 000 inhabitants,Total,2021,CICDISCH,Ischaemic heart diseases,67.2
+Australia,deaths per 100 000 inhabitants,Total,2022,CICDISCH,Ischaemic heart diseases,69.9
+Australia,deaths per 100 000 inhabitants,Total,2016,CICDISCH,Ischaemic heart diseases,84.4
+Australia,deaths per 100 000 inhabitants,Total,2017,CICDTRAC,Transport accidents,5.9
+Australia,deaths per 100 000 inhabitants,Total,2018,CICDTRAC,Transport accidents,5.6
+Australia,deaths per 100 000 inhabitants,Total,2019,CICDTRAC,Transport accidents,6.1
+Australia,deaths per 100 000 inhabitants,Total,2020,CICDTRAC,Transport accidents,5.4
+Australia,deaths per 100 000 inhabitants,Total,2021,CICDTRAC,Transport accidents,5.5
+Australia,deaths per 100 000 inhabitants,Total,2016,CICDSYMP,"Symptoms, signs, ill-defined causes",5.4
+Australia,deaths per 100 000 inhabitants,Total,2019,CICDGENI,Diseases of the genitourinary system,16.5
+Australia,deaths per 100 000 inhabitants,Total,2017,CICDDMTA,Dementia,40.4
+Australia,deaths per 100 000 inhabitants,Total,2018,CICDDMTA,Dementia,40.9
+Australia,deaths per 100 000 inhabitants,Total,2019,CICDDMTA,Dementia,42.6
+Australia,deaths per 100 000 inhabitants,Total,2020,CICDDMTA,Dementia,39.5
+Australia,deaths per 100 000 inhabitants,Total,2021,CICDDMTA,Dementia,40.7
+Australia,deaths per 100 000 inhabitants,Total,2022,CICDDMTA,Dementia,42.8
+Australia,deaths per 100 000 inhabitants,Total,2016,CICDDMTA,Dementia,39.9
+Australia,deaths per 100 000 inhabitants,Total,2019,CICDCERV,Cerebrovascular diseases,40.6
+Australia,deaths per 100 000 inhabitants,Total,2020,CICDCERV,Cerebrovascular diseases,37.9
+Australia,deaths per 100 000 inhabitants,Total,2021,CICDCERV,Cerebrovascular diseases,37.9
+Australia,deaths per 100 000 inhabitants,Total,2022,CICDCERV,Cerebrovascular diseases,36.8
+Australia,deaths per 100 000 inhabitants,Total,2016,CICDCERV,Cerebrovascular diseases,46.1
+Australia,deaths per 100 000 inhabitants,Total,2017,CICDCERV,Cerebrovascular diseases,43.8
+Australia,deaths per 100 000 inhabitants,Total,2018,CICDCERV,Cerebrovascular diseases,42.2
+Australia,deaths per 100 000 inhabitants,Total,2017,CICDSANG,Diseases of the blood and blood-forming organs,2.3
+Australia,deaths per 100 000 inhabitants,Total,2018,CICDSANG,Diseases of the blood and blood-forming organs,2.1
+Australia,deaths per 100 000 inhabitants,Total,2019,CICDSANG,Diseases of the blood and blood-forming organs,2.3
+Australia,deaths per 100 000 inhabitants,Total,2020,CICDSANG,Diseases of the blood and blood-forming organs,2.1
+Australia,deaths per 100 000 inhabitants,Total,2021,CICDSANG,Diseases of the blood and blood-forming organs,2.1
+Australia,deaths per 100 000 inhabitants,Total,2022,CICDSANG,Diseases of the blood and blood-forming organs,2.1
+Australia,deaths per 100 000 inhabitants,Total,2016,CICDSANG,Diseases of the blood and blood-forming organs,2.2

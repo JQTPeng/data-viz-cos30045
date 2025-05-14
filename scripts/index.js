@@ -2,7 +2,8 @@
 // TODO: Add slider
 
 
-import { choropleth } from "./charts.js";
+import { choropleth } from "./charts/choropleth.js";
+import { stackedArea } from "./charts/linechart.js";
 
 /**
  * Instantiate a choropleth map visualization for mortality data.
@@ -27,9 +28,6 @@ async function mortality_choropleth() {
             </div>
         `;
     });
-
-    console.log(d3.max(main_dataset, d => d.value))
-    console.log(d3.min(main_dataset, d => d.value))
 
     const mortality_datasets = {
         y2015: d3.group(main_dataset, d => d.year == 2015 && d.sex === "Total").get(true),
@@ -66,8 +64,8 @@ async function mortality_choropleth() {
     const colorThreashold = ["#fcae91", "#fb6a4a", "#ef3b2c", "#b1121b", "#67000d"];
 
     choropleth_chart
-        .width(850)
-        .height(650)
+        .width(800)
+        .height(500)
         .dataset(mortality_datasets.y2017)
         .colorConfig({
             no_data: "#808080",
@@ -86,19 +84,47 @@ async function mortality_choropleth() {
     })
 }
 
+/**
+ * Instantiate a stacked area line graph visualization for 
+ * australian mortality rate and top 5 causes of death.
+ * @description Mortality per 100,000 inhabitants - Stacked Area Chart
+*/
+async function stackedArea_CausesOfDeath() {
+    // Setup datasets
+    const raw = await d3.csv("./resources/data/OECD_AUS_Cause_of_Mortality.csv");
+    // process data
+    let data = [];
+    const xDomain = Array.from(new Set(raw.map(d => d.Year))).sort((a, b) => a - b);
+    xDomain.forEach((year) => {
+        data.push(...(raw.filter(d => d.Year == year)).sort((a, b) => b.value - a.value).slice(0, 6));
+        // data.slice(0, 6).forEach((d, i) => {
+        //     console.log(`${d.Year} - ${i + 1} ${d["Cause"]}`)
+        // }) // DEBUG
+    })
+
+    console.log(data);
+
+    const categories = d3.union(data.map(d => d["Cause Code"]));
+    const index = d3.index(data, d => d.Year, d => d["Cause Code"]);
+
+    const myChart = stackedArea()
+    myChart
+        .width(1000)
+        .height(500)
+        .data(data)
+        .categories(categories)
+        .seriesIndex(index)
+        .xDomain(xDomain);
+    myChart("#stackedArea");
+}
+
 function initCharts() {
     mortality_choropleth();
+    stackedArea_CausesOfDeath();
     /**
      * Instantiate a line graph visualization for death and birth rate
      * @description rate per 100,000 inhabitants in Australia
      * between mortality and birth
-     */
-
-
-    /**
-     * Instantiate a stream line graph visualization for death and birth rate
-     * @description number of deaths measured for total deaths and top 
-     * causes of mortality each year
      */
 
     /**
@@ -106,6 +132,40 @@ function initCharts() {
      * @description number of deaths per 100,000 for each cause of mortality
      * each year
      */
+}
+
+let draggable = false;
+
+function handleEnterDraggable(event) {
+    const element = event.target;
+    draggable = true;
+    element.classList.add("grab");
+    element.classList.remove("grabbing");
+    console.log("enter")
+}
+
+function handleLeaveDraggable(event) {
+    const element = event.target;
+    draggable = false;
+    element.classList.remove("grab");
+    element.classList.remove("grabbing");
+    console.log("leave")
+}
+
+function handleDownDraggable(event) {
+    if (!draggable) return;
+    const element = event.target;
+    element.classList.add("grabbing");
+    element.classList.remove("grab");
+    console.log("down")
+}
+
+function handleUpDraggable(event) {
+    if (!draggable) return;
+    const element = event.target;
+    element.classList.add("grab");
+    element.classList.remove("grabbing");
+    console.log("up")
 }
 
 window.onload = async () => {
