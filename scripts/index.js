@@ -1,5 +1,6 @@
 // TODO: Add tickbox male, female, total
 // TODO: Add slider
+// TODO: Parse datasets to json file
 
 
 import { choropleth } from "./charts/choropleth.js";
@@ -12,6 +13,10 @@ import { stackedArea } from "./charts/linechart.js";
  * @description Mortality per 100,000 inhabitants - World Choropleth
 */
 async function mortality_choropleth() {
+    /**
+     * CSV processing for simple data structure is more
+     * efficient than json in terms of load time and size
+     */
     const main_dataset = await d3.csv("./resources/data/OECD_Cause_of_Mortality.csv");
     main_dataset.forEach(d => {
         d.name = d.country;
@@ -29,7 +34,7 @@ async function mortality_choropleth() {
         `;
     });
 
-    const mortality_datasets = {
+    const rawData = {
         y2015: d3.group(main_dataset, d => d.year == 2015 && d.sex === "Total").get(true),
         y2016: d3.group(main_dataset, d => d.year == 2016 && d.sex === "Total").get(true),
         y2017: d3.group(main_dataset, d => d.year == 2017 && d.sex === "Total").get(true),
@@ -66,7 +71,7 @@ async function mortality_choropleth() {
     choropleth_chart
         .width(800)
         .height(500)
-        .dataset(mortality_datasets.y2017)
+        .dataset(rawData.y2017)
         .colorConfig({
             no_data: "#808080",
             border: "#808080",
@@ -79,7 +84,7 @@ async function mortality_choropleth() {
     choropleth_chart(selection);
 
     d3.select("#btnChange").on("click", () => {
-        choropleth_chart.dataset(mortality_datasets.y2015)
+        choropleth_chart.dataset(rawData.y2015)
         choropleth_chart(selection);
     })
 }
@@ -90,9 +95,7 @@ async function mortality_choropleth() {
  * @description Mortality per 100,000 inhabitants - Stacked Area Chart
 */
 async function stackedArea_CausesOfDeath() {
-    // Setup datasets
     const raw = await d3.csv("./resources/data/OECD_AUS_Cause_of_Mortality.csv");
-    // process data
     let data = [];
     const xDomain = Array.from(new Set(raw.map(d => d.Year))).sort((a, b) => a - b);
     xDomain.forEach((year) => {
@@ -102,7 +105,6 @@ async function stackedArea_CausesOfDeath() {
         // }) // DEBUG
     })
 
-    console.log(data);
 
     const categories = d3.union(data.map(d => d["Cause Code"]));
     const index = d3.index(data, d => d.Year, d => d["Cause Code"]);
