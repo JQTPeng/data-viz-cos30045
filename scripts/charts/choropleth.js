@@ -1,4 +1,3 @@
-// TODO: Title & Caption, etc options
 // TODO: Mock data
 // TODO: colorConfig requires domain. Requires initial data
 // TODO: dataset property name validation (e.g., "Value" vs "value")
@@ -280,22 +279,23 @@ function choropleth() {
          * Render the legend scale container, colors and texts
          * NOTE: Fixed to Classed Legend (or Binned Legend)
          */
-        const threshold_height = 30;
+        const threshold_height = 25;
         const threshold_width = 20;
         const colorRange = [...colorConfig.range];
         const colorTexts = [...colorConfig.domain];
-
+        
         let start = 0; // setup the threshold texts
         for (let i = 0; i < colorTexts.length; i++) {
             let end = colorTexts[i];
             colorTexts[i] = `${start} - ${end}`;
             start = end + 1;
         }
-
+        
         colorRange.unshift(colorConfig.no_data);
         colorTexts.unshift("No data");
-        const legend_height = colorRange.length * threshold_height + padding * 2;
-        const legend_width = threshold_width + 110; // hardcoded
+        const legend_padding_top = 20;
+        const legend_height = colorRange.length * threshold_height + padding * 2 + legend_padding_top;
+        const legend_width = threshold_width + 150; // hardcoded
 
         /**
          * Render legend group
@@ -321,11 +321,35 @@ function choropleth() {
                 .attr("fill", "white")
                 .attr("filter", "url(#drop-shadow)");
 
-            legend_group
+            const legend_unit = legend_group // unit measure
+                .append("g")
+                .attr("id", "legend_units")
+                .append("text")
+                .attr("x", padding * 2)
+                .attr("y", height - threshold_height * colorRange.length - padding * 2 - legend_padding_top + 5)
+                .style("font-size", "0.8em")
+                .style("font-weight", "bold")
+                .style("color", "black")
+                .text("cases / 10");
+
+            legend_unit
+                .append("tspan")
+                .attr("dy", -7)
+                .style("font-size", "0.6em")
+                .style("color", "black")
+                .text("5");
+
+            legend_unit
+                .append("tspan")
+                .attr("dy", "7")
+                .style("font-size", "1em")
+                .text(" inhabitants")
+
+            legend_group // colors
                 .append("g")
                 .attr("id", "thresholdColors")
 
-            legend_group
+            legend_group // threshold texts
                 .append("g")
                 .attr("id", "thresholdTexts")
         }
@@ -341,7 +365,7 @@ function choropleth() {
             .attr("height", threshold_height)
             .attr("fill", (d) => d)
             .attr("x", (d, i) => padding * 2)
-            .attr("y", (d, i) => height - padding * 2 - (colorRange.length - i) * threshold_height);
+            .attr("y", (d, i) => height - padding * 2 - (colorRange.length - i) * threshold_height + 2);
 
         legend_texts // thresholds texts
             .selectAll("text")
