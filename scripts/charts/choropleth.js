@@ -1,6 +1,7 @@
 // TODO: Mock data
 // TODO: colorConfig requires domain. Requires initial data
 // TODO: dataset property name validation (e.g., "Value" vs "value")
+// TODO: change size of elements (e.g., text) based on svg size set
 
 let draggable = false;
 
