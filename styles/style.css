@@ -5,10 +5,17 @@ body {
     font-family: Roboto, "Helvetica Neue", Helvetica, Arial, sans-serif;
 }
 
-#choropleth {
+.chart-canvas {
     border: 1px solid #ccc;
-    margin: auto;
     overflow: hidden;
+}
+
+.grab {
+    cursor: url("../resources/icons/cursor-grab.svg"), grab;
+}
+
+.grabbing {
+    cursor: url("../resources/icons/cursor-grabbing.svg"), pointer;
 }
 
 #tooltip {

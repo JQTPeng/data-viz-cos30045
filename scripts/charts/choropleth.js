@@ -1,11 +1,17 @@
 // TODO: Title & Caption, etc options
+// TODO: Mock data
 // TODO: colorConfig requires domain. Requires initial data
+// TODO: dataset property name validation (e.g., "Value" vs "value")
 
+let draggable = false;
 
 /**
  * Choropleth Chart
  * -------------------------
  * @property width, height, padding, dataset, colorConfig
+ * @limitations
+ * - Fixed to classed legend (or binned legend)
+ * - Legend scale is not dynamically sized
  * @feature
  * - Method chaining to customize properties
  * - Can include custom tooltip HTML component
@@ -20,6 +26,7 @@ function choropleth() {
     let width = 500;
     let height = 500;
     let padding = 20;
+    let projectionScale = 100;
 
     /**
      * @type {Object}
@@ -68,7 +75,7 @@ function choropleth() {
         }
 
         geoJson = await d3.json("./resources/json/countries.json").then((json) => dataset_to_geoJson(dataset, json));
-        projection.scale(100).translate([width / 2, height / 1.5]);
+        projection.scale(projectionScale).translate([width / 2, height / 1.5]);
         path.projection(projection);
         colorScale = colorConfig.scale.domain(colorConfig.domain).range(colorConfig.range);
 
@@ -80,14 +87,70 @@ function choropleth() {
 
         let zoomGroup = svg.select("#zoomGroup");
         if (zoomGroup.empty()) {
-            zoomGroup = svg.append("g").attr("id", "zoomGroup");
+            zoomGroup = svg.append("g")
+                .attr("id", "zoomGroup")
+                .classed("grab", false)
+                .classed("grabbing", false);
         }
 
-        const zoom = d3.zoom().scaleExtent([1, 8]).on("zoom", (event) => {
-            zoomGroup.attr("transform", event.transform);
-        });
+        /**
+         * setup zoom settings and 
+         * cursor interactions for user feedback
+         */
+        const zoom = d3.zoom()
+            .scaleExtent([1, 5]) // TODO: need to limit the unbounded panning
+            .on("end", () => {
+                zoomGroup
+                    .classed("grab", true)
+                    .classed("grabbing", false)
+            })
+            .on("zoom", (event) => {
+                zoomGroup.attr("transform", event.transform);
+            });
 
         zoomGroup
+            .on("mousedown", () => {
+                if (!draggable) return;
+                console.log('down')
+                zoomGroup
+                    .classed("grab", false)
+                    .classed("grabbing", true)
+            })
+            .on("mouseenter", () => {
+                draggable = true;
+                zoomGroup
+                    .classed("grab", true)
+                    .classed("grabbing", false)
+            })
+            .on("mouseleave", () => {
+                draggable = false;
+                zoomGroup
+                    .classed("grab", false)
+                    .classed("grabbing", false)
+            })
+
+
+        /**
+         * Render the country paths
+         * and setup the behaviour for enter, 
+         * update and exit
+         */
+        if (zoomGroup.select("#background").empty()) {
+            zoomGroup.append("rect")
+                .attr("id", "background")
+                .attr("width", "100vh") // TODO: change when bounded panning
+                .attr("height", "100vh")
+                .attr("fill", "white")
+        }
+
+        let mapGroup = zoomGroup.select("#map");
+        if (mapGroup.empty()) {
+            mapGroup = zoomGroup
+                .append("g")
+                .attr("id", "map");
+        }
+
+        mapGroup
             .selectAll("path")
             .data(geoJson.features)
             .join(
@@ -96,7 +159,7 @@ function choropleth() {
                     .attr("id", d => d.properties.name.trim().replace(/\s/g, ''))
                     .attr("d", path)
                     .call(setStyles)
-                    .call(setEvents)
+                    .call(setCountryEvents)
                     .style("opacity", "0")
                     .transition()
                     .duration(300)
@@ -104,7 +167,7 @@ function choropleth() {
                     .style("opacity", "1"),
                 update => update
                     .attr("d", path)
-                    .call(setEvents)
+                    .call(setCountryEvents)
                     .transition()
                     .duration(300)
                     .call(setStyles),
@@ -120,7 +183,7 @@ function choropleth() {
     * -------------------------------------
     * @param {d3.Selection} selection - A D3 selection of SVG elements.
     */
-    function setEvents(selection) {
+    function setCountryEvents(selection) {
         selection
             .on("mouseover.tooltip", (event, data) => {
                 if (data.properties.value === undefined) return;
@@ -139,7 +202,7 @@ function choropleth() {
             .on("mouseout.reset", (event, data) => {
                 if (data.properties.value === undefined) return;
                 d3.select("#tooltip").remove();
-                resetPathOrder();
+                resetPathOrder(); // TODO: called once before every update
                 d3.select(event.target)
                     .transition()
                     .duration(50)
@@ -193,18 +256,25 @@ function choropleth() {
             .style("opacity", "1")
     }
 
-    function setLegendScale() {
-        // Define blur effect
-        const defs = svg.append("defs");
 
-        defs.append("filter")
-            .attr("id", "drop-shadow")
-            .append("feDropShadow")
-            .attr("dx", 0.8)            // shadow x offset
-            .attr("dy", 2)              // shadow y offset
-            .attr("stdDeviation", 2)    // blur radius
-            .attr("flood-color", "black")
-            .attr("flood-opacity", 0.5);
+    /**
+     * Render the legend scale
+     */
+    function setLegendScale() {
+        let defs = svg.select("#myDefs");
+        if (defs.empty()) { // render once
+            defs = svg.append("defs")
+                .attr("id", "myDefs");
+
+            defs.append("filter")
+                .attr("id", "drop-shadow")
+                .append("feDropShadow")
+                .attr("dx", 0.8)            // shadow x offset
+                .attr("dy", 2)              // shadow y offset
+                .attr("stdDeviation", 2)    // blur radius
+                .attr("flood-color", "black")
+                .attr("flood-opacity", 0.5);
+        }
 
         /**
          * Render the legend scale container, colors and texts
@@ -215,7 +285,7 @@ function choropleth() {
         const colorRange = [...colorConfig.range];
         const colorTexts = [...colorConfig.domain];
 
-        let start = 0;
+        let start = 0; // setup the threshold texts
         for (let i = 0; i < colorTexts.length; i++) {
             let end = colorTexts[i];
             colorTexts[i] = `${start} - ${end}`;
@@ -226,40 +296,64 @@ function choropleth() {
         colorTexts.unshift("No data");
         const legend_height = colorRange.length * threshold_height + padding * 2;
         const legend_width = threshold_width + 110; // hardcoded
-        const legend_group = svg.append("g");
 
-        legend_group // container box
-            .append("rect")
-            .attr("x", padding)
-            .attr("y", height - legend_height - padding)
-            .attr("height", legend_height)
-            .attr("width", legend_width)
-            .attr("fill", "white")
-            .attr("filter", "url(#drop-shadow)");
+        /**
+         * Render legend group
+         * -------------------
+         * <g id="legendGroup">
+         *      <rect/>
+         *      <g id="thresholdColors"></g>
+         *      <g id="thresholdTexts"></g>
+         * </g>
+         */
+        let legend_group = svg.select("#legendGroup");
+        if (legend_group.empty()) { // render once
+            legend_group = svg
+                .append("g")
+                .attr("id", "legendGroup");
 
-        legend_group // thresholds
-            .append("g")
+            legend_group // container box
+                .append("rect")
+                .attr("x", padding)
+                .attr("y", height - legend_height - padding)
+                .attr("height", legend_height)
+                .attr("width", legend_width)
+                .attr("fill", "white")
+                .attr("filter", "url(#drop-shadow)");
+
+            legend_group
+                .append("g")
+                .attr("id", "thresholdColors")
+
+            legend_group
+                .append("g")
+                .attr("id", "thresholdTexts")
+        }
+
+        let legend_colors = legend_group.select("#thresholdColors");
+        let legend_texts = legend_group.select("#thresholdTexts");
+
+        legend_colors // thresholds colors
             .selectAll("rect")
             .data(colorRange)
-            .enter()
-            .append("rect")
-            .attr("width", threshold_width + "px")
-            .attr("height", threshold_height + "px")
+            .join("rect")
+            .attr("width", threshold_width)
+            .attr("height", threshold_height)
             .attr("fill", (d) => d)
             .attr("x", (d, i) => padding * 2)
             .attr("y", (d, i) => height - padding * 2 - (colorRange.length - i) * threshold_height);
 
-        legend_group // threshold texts
-            .append("g")
+        legend_texts // thresholds texts
             .selectAll("text")
             .data(colorTexts)
-            .enter()
-            .append("text")
+            .join("text")
             .attr("x", (d, i) => padding * 3 + 5) // add n to adjust position slightly to right
             .attr("y", (d, i) => height - padding * 2 - (colorTexts.length - i) * threshold_height + 20) // hardcoded
             .style("font-size", "0.8em")
             .style("color", "black")
             .text(d => d);
+
+        console.log("legend");
     }
 
     /**
@@ -274,7 +368,7 @@ function choropleth() {
             const elementToMove = svg.select(`#${name}`).node();
             if (elementToMove) {
                 count++;
-                svg.select("#zoomGroup").node().appendChild(elementToMove);
+                svg.select("#map").node().appendChild(elementToMove);
             } else {
                 console.warn(`Element with ID "${name}" not found.`);
             }
