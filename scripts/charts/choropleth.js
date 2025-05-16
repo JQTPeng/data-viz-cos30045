@@ -379,8 +379,6 @@ function choropleth() {
             .style("font-weight", "600")
             .style("fill", "grey")
             .text(d => d);
-
-        console.log("legend");
     }
 
     /**
