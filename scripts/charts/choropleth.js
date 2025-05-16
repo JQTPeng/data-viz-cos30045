@@ -75,7 +75,7 @@ function choropleth() {
         }
 
         geoJson = await d3.json("./resources/json/countries.json").then((json) => dataset_to_geoJson(dataset, json));
-        projection.scale(projectionScale).translate([width / 2, height / 1.5]);
+        projection.scale(projectionScale).translate([width / 2, height / 1.3]);
         path.projection(projection);
         colorScale = colorConfig.scale.domain(colorConfig.domain).range(colorConfig.range);
 
