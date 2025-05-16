@@ -69,8 +69,8 @@ async function mortality_choropleth() {
     const colorThreashold = ["#fcae91", "#fb6a4a", "#ef3b2c", "#b1121b", "#67000d"];
 
     choropleth_chart
-        .width(800)
-        .height(500)
+        .width(700)
+        .height(400)
         .dataset(rawData.y2017)
         .colorConfig({
             no_data: "#808080",
@@ -111,8 +111,8 @@ async function stackedArea_CausesOfDeath() {
 
     const myChart = stackedArea()
     myChart
-        .width(1000)
-        .height(500)
+        .width(700)
+        .height(400)
         .data(data)
         .categories(categories)
         .seriesIndex(index)
