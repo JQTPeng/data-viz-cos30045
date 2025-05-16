@@ -19,18 +19,25 @@ const mockdata = [
 
 function stackedArea() {
     const color = d3.scaleOrdinal();
+    const colorRange = ["#003f5c", "#374c80", "#7a5195", "#bc5090", "#ef5675", "#ff764a", "#ffa600"];
     const xScale = d3.scalePoint();
     const yScale = d3.scaleLinear();
 
     let title = "My Stacked Area Chart";
     let width = 1000;
     let height = 500;
-    let padding = 50;
+    let margin = {
+        top: 50,
+        left: 50,
+        bottom: 50,
+        right: 150
+    }
 
     // Data
     let data = [];
     let categories = [];
     let seriesIndex = [];
+    let series = [];
 
     // Axis
     let xDomain = [];
@@ -40,6 +47,7 @@ function stackedArea() {
     function chart(selection) {
         // Setup SVG
         let svg = d3.select(selection).select("svg");
+
         if (svg.empty()) {
             svg = d3.select(selection)
                 .append("svg")
@@ -57,7 +65,8 @@ function stackedArea() {
             xAxis.tickFormat(d3.timeFormat("%Y-%m-%d"));
         }
 
-        const series = d3.stack()
+        // Setup
+        series = d3.stack()
             .keys(categories)
             .value(([, group], key) => {
                 const item = group.get(key);
@@ -67,51 +76,129 @@ function stackedArea() {
 
         xScale
             .domain(xDomain)
-            .range([padding, width - padding * 3]); // leave space for legend
+            .range([margin.left, width - margin.right]); // leave space for legend
 
         yScale
-            .domain([0, d3.max(series.flat(2))])
-            .range([height - padding, padding * 1.8])
+            .domain([0, d3.max(series.flat(2)) * 1.2])
+            .range([height - margin.bottom, margin.top])
 
         color
             .domain(categories)
-            .range(d3.schemePaired); // https://d3js.org/d3-scale-chromatic/categorical
+            .range(colorRange);
 
-        svg.selectAll("mylayers")
+        svg.call(drawContent);
+        svg.call(drawAxis);
+
+
+        let legend = d3.select("#legend-group");
+        if (legend.empty()) {
+            legend = svg.append("g").attr("id", "legend-group")
+        }
+
+        const legend_margin = { top: 200, left: 20 }; // TODO: make this customizable
+        const legend_rect_size = 15; // TODO: make this customizable
+
+        legend
+            .selectAll("rect")
+            .data(colorRange)
+            .join("rect")
+            .attr("x", width - margin.right + legend_margin.left)
+            .attr("y", (d, i) => margin.top + legend_margin.top - i * 20)
+            .attr("width", legend_rect_size)
+            .attr("height", legend_rect_size)
+            .style("fill", d => d)
+            .style("fill-opacity", 0.8)
+            .attr("stroke", d => d);  
+
+        legend
+            .selectAll("text")
+            .data(categories)
+            .join("text")
+            .attr("x", width - margin.right + legend_margin.left * 2)
+            .attr("y", (d, i) => margin.top + legend_margin.top - i * 20 + 12)
+            .text(d => d)
+            .style("font-size", "0.8em")
+            .style("font-weight", "600")
+            .style("fill", "grey")
+    }
+
+    function drawContent(selection) {
+        /**
+         * Draw the areas 
+         */
+        const area = d3.area()
+            .x((d, i) => xScale(d.data[0]))
+            .y0((d) => yScale(d[0]))
+            .y1((d) => yScale(d[1]))
+
+        const areaFromBottom = d3.area() // animation purpose
+            .x((d, i) => xScale(d.data[0]))
+            .y0((d) => yScale(0))
+            .y1((d) => yScale(0));
+
+        selection.selectAll("mylayers")
             .data(series)
             .join("path")
+            .attr("d", areaFromBottom)
             .style("fill", (d, i) => color(d.key))
-            .style("fill-opacity", 0.6)
-            .attr("d", d3.area()
-                .x((d, i) => xScale(d.data[0]))
-                .y0((d) => yScale(d[0]))
-                .y1((d) => yScale(d[1]))
-            );
+            .style("fill-opacity", 0.8)
+            .transition()
+            .duration(1000)
+            .delay(300)
+            .attr("d", area)
 
-        svg.call(drawAxis);
+        /**
+         * Draw the lines that will provide a
+         * seperation for each area
+         */
+        const line = d3.line()
+            .x((d) => xScale(d.data[0]))
+            .y((d) => {
+                if (d == 0) return 0;
+                return yScale(d[1]);
+            });
+
+        const lineFromBottom = d3.line() // animation purpose
+            .x((d) => xScale(d.data[0]))
+            .y((d) => yScale(0));
+
+        selection.selectAll(".top-line")
+            .data(series)
+            .join("path")
+            .attr("class", "top-line")
+            .attr("fill", "none")
+            .attr("stroke", (d, i) => color(d.key))
+            .attr("stroke-width", 1)
+            .attr("d", lineFromBottom)
+            .transition()
+            .duration(1000)
+            .delay(300)
+            .attr("d", line)
     }
 
     function drawAxis(selection) {
-        yAxis
-            .ticks(5)
-            .tickSize(-(width - padding * 4))
+        yAxis.ticks(10)
 
         // axis
         selection.append("g")
             .attr("class", "x-axis")
-            .attr("transform", `translate(0,${height - padding})`)
+            .attr("transform", `translate(0,${height - margin.bottom})`)
             .call(xAxis);
+
+        selection.select(".x-axis")
+            .selectAll(".tick text")
+            .attr("y", 15);
 
         selection.append("g")
             .attr("class", "y-axis")
-            .attr("transform", `translate(${padding},0)`)
+            .attr("transform", `translate(${margin.left},0)`)
             .call(yAxis)
-            .filter(d => {
-                d === yScale.domain()[1]
-                console.log(yScale.domain()[1])
-            })
+            .filter(d => d === yScale.domain()[1])
             .select("line")
-            .style("stroke", "none");;
+            .style("stroke", "none");
+
+        selection.select(".y-axis")
+            .selectAll(".tick text")
 
         selection.selectAll(".tick text")
             .style("fill", "grey")
@@ -123,10 +210,10 @@ function stackedArea() {
             .style("stroke-linecap", "round")
             .style("stroke-dasharray", "3,3");
 
-        selection.select(".y-axis").select(".domain").remove();
-    }
-
-    function drawLegend(selection) {
+        selection
+            .selectAll(".domain")
+            .attr("stroke", "grey")
+            .style("stroke-width", 0.7)
 
     }
 
@@ -164,9 +251,9 @@ function stackedArea() {
         return chart;
     }
 
-    chart.padding = function (_) {
-        if (!arguments.length) return padding;
-        padding = _;
+    chart.margin = function (_) {
+        if (!arguments.length) return margin;
+        margin = _;
         return chart;
     }
 
