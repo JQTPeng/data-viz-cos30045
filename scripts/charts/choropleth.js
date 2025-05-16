@@ -162,8 +162,8 @@ function choropleth() {
                     .call(setCountryEvents)
                     .style("opacity", "0")
                     .transition()
-                    .duration(300)
-                    .delay(30)
+                    .duration(1000)
+                    .delay(50)
                     .style("opacity", "1"),
                 update => update
                     .attr("d", path)
@@ -330,20 +330,21 @@ function choropleth() {
                 .attr("y", height - threshold_height * colorRange.length - padding * 2 - legend_padding_top + 5)
                 .style("font-size", "0.8em")
                 .style("font-weight", "bold")
-                .style("color", "black")
+                .style("fill", "grey")
                 .text("cases / 10");
 
             legend_unit
                 .append("tspan")
                 .attr("dy", -7)
                 .style("font-size", "0.6em")
-                .style("color", "black")
+                .style("fill", "grey")
                 .text("5");
 
             legend_unit
                 .append("tspan")
                 .attr("dy", "7")
                 .style("font-size", "1em")
+                .style("fill", "grey")
                 .text(" inhabitants")
 
             legend_group // colors
@@ -375,7 +376,8 @@ function choropleth() {
             .attr("x", (d, i) => padding * 3 + 5) // add n to adjust position slightly to right
             .attr("y", (d, i) => height - padding * 2 - (colorTexts.length - i) * threshold_height + 20) // hardcoded
             .style("font-size", "0.8em")
-            .style("color", "black")
+            .style("font-weight", "600")
+            .style("fill", "grey")
             .text(d => d);
 
         console.log("legend");
