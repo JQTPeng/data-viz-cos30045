@@ -23,9 +23,12 @@ function choropleth() {
     const projection = d3.geoMercator();
     const path = d3.geoPath()
     let svg = null;
-    let width = 500;
+    let width = 800;
     let height = 500;
     let padding = 20;
+    let margin = {
+        header_margin: 100
+    }
     let projectionScale = 100;
 
     /**
@@ -68,16 +71,32 @@ function choropleth() {
     * Use this function for enter, updates and exits.
     * @param {HTMLElement} selection - The D3 selection/HTML (e.g., a div or another DOM element) where the chart will be rendered.
     */
-    async function chart(selection) {
+   async function chart(selection) {
         svg = d3.select(selection).select("svg");
         if (svg.empty()) {
-            svg = d3.select(selection).append("svg").attr("width", width).attr("height", height);
+            svg = d3.select(selection)
+                .append("svg")
+                .attr("class", "chart-canvas")
+                .attr("width", width)
+                .attr("height", height);
         }
 
         geoJson = await d3.json("./resources/json/countries.json").then((json) => dataset_to_geoJson(dataset, json));
-        projection.scale(projectionScale).translate([width / 2, height / 1.3]);
+        projection.scale(projectionScale).translate([width / 2, height / 1.5]);
         path.projection(projection);
         colorScale = colorConfig.scale.domain(colorConfig.domain).range(colorConfig.range);
+
+        /**
+         * Draw the title and info
+         */
+        let chart_header = svg.select("#chartHeader")
+        if (chart_header.empty()) {
+            chart_header = svg.append("g")
+                .attr("id", "chartHeader")
+                .attr("width", width)
+                .attr("height", 200)
+                .style("stroke", );
+        }
 
         /**
          * setup base layer/group that will be used 
@@ -284,14 +303,14 @@ function choropleth() {
         const threshold_width = 20;
         const colorRange = [...colorConfig.range];
         const colorTexts = [...colorConfig.domain];
-        
+
         let start = 0; // setup the threshold texts
         for (let i = 0; i < colorTexts.length; i++) {
             let end = colorTexts[i];
             colorTexts[i] = `${start} - ${end}`;
             start = end + 1;
         }
-        
+
         colorRange.unshift(colorConfig.no_data);
         colorTexts.unshift("No data");
         const legend_padding_top = 20;
