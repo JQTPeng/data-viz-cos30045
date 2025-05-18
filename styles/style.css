@@ -1,14 +1,219 @@
-* {
-    font-size: 16px;
-}
 body {
-    font-family: Roboto, "Helvetica Neue", Helvetica, Arial, sans-serif;
+    /* font-family: Segoe UI, SegoeUI, Helvetica Neue, Helvetica, Arial, sans-serif; */
+    font-family: "Guardian Egyptian Web", Georgia, "Palatino Linotype", Palatino, "Times New Roman", serif;
+}
+
+.layout-body {
+    display: grid;
+    grid-template: minmax(auto, max-content) auto var(--atlas-contained-height) auto / auto 300px 900px 300px auto;
+    grid-template-areas:
+        "header header header header header"
+        "hero hero hero hero hero"
+        ". menu main aside ."
+        "footer footer footer footer footer";
+    ;
+    margin: 0 auto 0 auto;
+}
+
+.layout-body-header {
+    display: flex;
+    grid-area: header;
+}
+
+.layout-body-menu {
+    grid-area: menu;
+    min-width: 300px;
+}
+
+.layout-body-main {
+    grid-area: main;
+    max-width: 900px;
+}
+
+.layout-body-aside {
+    grid-area: aside;
+    min-width: 300px;
+}
+
+.margin-side-auto {
+    margin: 0 auto 20px auto;
+}
+
+.margin-none {
+    margin: none;
+}
+
+
+header {
+    width: 100%;
+    background-color: #27548A;
+    margin-bottom: 40px;
+    color: #fcf4da;
+}
+
+.header-center {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-evenly;
+    align-items: center;
+
+    margin: auto;
+    padding: 20px 0 20px 0;
+
+    min-width: 400px;
+}
+
+.header-info {
+    display: flex;
+    flex-direction: column;
+}
+
+#header-title {
+    font-size: 2em;
+    text-align: center;
+}
+
+#header-meta {
+    text-align: center;
+}
+
+.left-container {
+    margin-left: auto;
+    top: 24px;
+    position: sticky;
+    max-width: 300px;
+}
+
+
+#FilterForm {
+    top: 24px;
+    position: sticky;
+    padding: 0 20px 0 20px;
+    height: calc(100vh - 200.198px);
+    max-height: 14552.2px;
+    background-color: white;
+    border: 1px solid #ccc;
+    border-radius: 10px;
+    z-index: 1;
+}
+
+#FilterForm>fieldset {
+    margin: 0 0 20px 0;
+    padding: 0 0 20px 0;
+    border: none;
+    border-bottom: 1px solid #ccc;
+}
+
+input[type="range"] {
+    width: 100%;
+    box-sizing: border-box;
+    /* ensures padding/border don't exceed 100% */
+}
+
+input[type="text"] {
+    border: 1px solid #ccc;
+    border-radius: 5px;
+}
+
+input[type="text"]:focus {
+    outline: 1.5px solid #ccc;
+}
+
+legend {
+    font-weight: bold;
+    font-size: 1em;
+}
+
+.form-title {
+    border-bottom: 1px solid #ccc;
+    padding: 0 0 20px 0;
+    margin: 20px 0 20px 0;
+}
+
+.chart-supported-filter {
+    font-size: 1.5em;
+    font-weight: bold;
+    padding-bottom: 5px;
+}
+
+.gender-field>label {
+    margin: 0 0 24px 0;
+    line-height: 2;
 }
 
 .chart-canvas {
-    margin: 20px auto 20px auto;
+    width: min-content;
+}
+
+.year-inputs {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.year-field>p {
+    margin: 0 0 0 0;
+    line-height: 2;
+}
+
+#yearSlider {
+    margin: 0 10px 0 10px;
+}
+
+#yearText {
+    width: 50px;
+    height: 25px;
+    margin-left: 24px;
+    text-align: center;
+}
+
+#main-content {
+    margin: 0 auto 0 auto;
+    width: min-content;
+}
+
+.article-meta {
+    font-size: 0.8em;
+}
+
+.chart {
+    margin: 0 0 24px 0;
     border: 1px solid #ccc;
-    overflow: hidden;
+    border-radius: 10px;
+}
+
+.chart-info {
+    margin: 10px 0 0 0;
+    padding: 0 24px 0 24px;
+    border-bottom: 1px solid #ccc;
+}
+
+.chart-tag {
+    padding: 0 10px 0 10px;
+    font-family: Segoe UI, SegoeUI, Helvetica Neue, Helvetica, Arial, sans-serif;
+    font-size: 0.5em;
+    font-weight: none;
+    color: white;
+    border-radius: 10px;
+}
+
+.choropleth-tag {
+    background-color: red;
+}
+
+.stackedArea-tag {
+    background-color: green;
+}
+
+.line-tag {
+    background-color: blue;
+}
+
+.chart-canvas {
+    height: min-content;
+    border-radius: 10px;
+    font-family: Segoe UI, SegoeUI, Helvetica Neue, Helvetica, Arial, sans-serif;
 }
 
 .grab {
