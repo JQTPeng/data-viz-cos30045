@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" class="layout">
 
 <head>
     <meta charset="utf-8">
@@ -10,12 +10,114 @@
     <link rel="stylesheet" href="./styles/style.css">
 </head>
 
-<body>
-    <button id="btnChange">Change</button>
-    <div style="width: min-content;" class="chart-canvas">
-        <div id="choropleth"></div>
-    </div>
-    <div style="width: min-content;" id="stackedArea" class="chart-canvas"></div>
+<body class="layout-body">
+    <header class="layout-body-header">
+        <div class="header-center">
+            <div class="header-info">
+                <span id="header-title">Data Visualization</span>
+                <span id="header-meta">COS300045 - Assignment 3</span>
+            </div>
+            <a href="https://github.com/JQTPeng/data-viz-cos30045">
+                <img width="25px" src="./resources/icons/github-mark/github-mark-white.svg" alt="github-icon"/>
+            </a>
+        </div>
+    </header>
+    <section class="layout-body-menu"> <!-- filters -->
+        <div class="left-container">
+            <form id="FilterForm" novalidate>
+                <h1 class="form-title">Filter by</h1>
+                <fieldset id="gender-field" class="gender-field">
+                    <legend>Gender</legend>
+                    <div class="chart-supported-filter">
+                        <span class="chart-tag choropleth-tag">choropleth</span>
+                        <span class="chart-tag stackedArea-tag">stacked area</span>
+                        <span class="chart-tag line-tag">line</span>
+                    </div>
+                    <label for="vehicle1">
+                        <input type="checkbox" id="gender" name="gender" value="Total">
+                        Total
+                    </label><br>
+                    <label for="vehicle2">
+                        <input type="checkbox" id="gender" name="gender" value="Male">
+                        Male
+                    </label><br>
+                    <label for="vehicle3">
+                        <input type="checkbox" id="gender" name="gender" value="Female">
+                        Female
+                    </label><br>
+                </fieldset>
+                <fieldset id="year-field" class="year-field">
+                    <legend>Year</legend>
+                    <div class="chart-supported-filter">
+                        <span class="chart-tag choropleth-tag">choropleth</span>
+                        <span class="chart-tag stackedArea-tag">stacked area</span>
+                        <span class="chart-tag line-tag">line</span>
+                    </div>
+                    <div class="year-inputs">
+                        <p>2015</p>
+                        <input type="range" name="yearSlider" id="yearSlider" value="2015" min="2015" max="2022"
+                            step="1" value="2015" />
+                        <p>2022</p>
+                        <input type="text" id="yearText" value="2015" />
+                    </div>
+                </fieldset>
+                <fieldset id="causes-field" class="causes-field">
+                    <legend>Cause</legend>
+                    <label for="vehicle3">
+                        <input type="checkbox" id="cause" name="cause" value="All" checked>
+                        All
+                    </label><br>
+                </fieldset>
+                </field>
+            </form>
+        </div>
+    </section>
+    <main id="main" class="layout-body-main"> <!-- my charts -->
+        <div id="main-content">
+            <h1 id="artile-title">Australia Causes of Mortality</h1>
+            <p class="article-meta">
+                <span class="author">By Matthew De Silva, Jared Teng</span>
+                &bull;
+                <time datetime="2025-05-18">May 18, 2025</time>
+            </p>
+            <div id="choropleth" class="chart">
+                <div class="chart-info">
+                    <h2>
+                        World Mortality Rate
+                        <span id="chart-year">2015</span>
+                        <span class="chart-tag choropleth-tag">choropleth</span>
+                    </h2>
+                    <p><strong>Measure</strong>: per 100,000 inhabitants; <strong>Sex</strong>: Total;
+                        <strong>Year</strong>: 2015
+                    </p>
+                </div>
+            </div>
+            <div id="stackedArea" class="chart">
+                <div class="chart-info">
+                    <h2>
+                        Australia Death/Birth Rate (2015-2022)
+                        <span class="chart-tag stackedArea-tag">stacked area</span>
+                    </h2>
+                    <p><strong>Measure</strong>: per 100,000 inhabitants; <strong>Sex</strong>: Total
+                    </p>
+                </div>
+            </div>
+            <div id="linechart" class="chart">
+                <div class="chart-info">
+                    <h2>
+                        Australia Birth and Mortality Rates per 100,000 People (2015–2022)
+                        <span class="chart-tag line-tag">line</span>
+                    </h2>
+                    <p><strong>Measure</strong>: per 100,000 inhabitants; <strong>Sex</strong>: Total
+                    </p>
+                </div>
+            </div>
+        </div>
+    </main>
+    <aside class="layout-body-aside">
+        <div class="">
+        </div>
+    </aside>
     <script type="module" src="./scripts/index.js"></script>
 </body>
 
