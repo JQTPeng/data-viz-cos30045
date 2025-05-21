@@ -206,7 +206,7 @@ function choropleth() {
         selection
             .on("mouseover.tooltip", (event, data) => {
                 if (data.properties.value === undefined) return;
-                setToolTip_relative_client(data.properties.tooltip, event.clientX, event.clientY, 20);
+                setToolTip_relative_client(data.properties.tooltip, event.pageX, event.pageY, 20);
             })
             .on("mouseover.highlight", (event, data) => {
                 if (data.properties.value === undefined) return;

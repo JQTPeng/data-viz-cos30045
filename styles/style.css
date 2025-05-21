@@ -210,6 +210,10 @@ legend {
     background-color: blue;
 }
 
+.bubble-tag {
+    background-color: rgb(225, 0, 255);
+}
+
 .chart-canvas {
     height: min-content;
     border-radius: 10px;

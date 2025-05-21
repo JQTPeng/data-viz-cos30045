@@ -23,15 +23,9 @@ function stackedArea() {
     const xScale = d3.scalePoint();
     const yScale = d3.scaleLinear();
 
-    let title = "My Stacked Area Chart";
     let width = 1000;
     let height = 500;
-    let margin = {
-        top: 50,
-        left: 50,
-        bottom: 50,
-        right: 150
-    }
+    let margin = { top: 50, left: 50, bottom: 50, right: 150 }
 
     // Data
     let data = [];
@@ -90,7 +84,6 @@ function stackedArea() {
         svg.call(drawContent);
         svg.call(drawAxis);
 
-
         let legend = d3.select("#legend-group");
         if (legend.empty()) {
             legend = svg.append("g").attr("id", "legend-group")
@@ -109,7 +102,7 @@ function stackedArea() {
             .attr("height", legend_rect_size)
             .style("fill", d => d)
             .style("fill-opacity", 0.8)
-            .attr("stroke", d => d);  
+            .attr("stroke", d => d);
 
         legend
             .selectAll("text")
@@ -135,18 +128,29 @@ function stackedArea() {
         const areaFromBottom = d3.area() // animation purpose
             .x((d, i) => xScale(d.data[0]))
             .y0((d) => yScale(0))
-            .y1((d) => yScale(0));
+            .y1((d) => yScale(0))
 
-        selection.selectAll("mylayers")
+        selection.selectAll(".mylayers")
             .data(series)
-            .join("path")
-            .attr("d", areaFromBottom)
-            .style("fill", (d, i) => color(d.key))
-            .style("fill-opacity", 0.8)
-            .transition()
-            .duration(1000)
-            .delay(300)
-            .attr("d", area)
+            .join(
+                enter => enter
+                    .append("path")
+                    .attr("class", "mylayers")
+                    .attr("d", areaFromBottom)
+                    .style("fill", (d, i) => color(d.key))
+                    .style("fill-opacity", 0.8)
+                    .transition()
+                    .duration(1000)
+                    .delay(300)
+                    .attr("d", area),
+                update => update
+                    .attr("d", areaFromBottom)
+                    .transition()
+                    .duration(1000)
+                    .delay(300)
+                    .attr("d", area),
+                exit => exit.remove()
+            )
 
         /**
          * Draw the lines that will provide a
@@ -154,10 +158,7 @@ function stackedArea() {
          */
         const line = d3.line()
             .x((d) => xScale(d.data[0]))
-            .y((d) => {
-                if (d == 0) return 0;
-                return yScale(d[1]);
-            });
+            .y((d) => d[1] == 0 ? 0 : yScale(d[1]));
 
         const lineFromBottom = d3.line() // animation purpose
             .x((d) => xScale(d.data[0]))
@@ -174,10 +175,67 @@ function stackedArea() {
             .transition()
             .duration(1000)
             .delay(300)
-            .attr("d", line)
+            .attr("d", line);
+
+        /**
+         * Add hover points
+         */
+        let hoverGroup = selection.select(".hover-group");
+        if (hoverGroup.empty()) {
+            hoverGroup = selection.append("g").attr("class", "hover-group");
+        }
+
+        let highlightCircle = selection.select(".hover-highlight");
+        if (highlightCircle.empty()) {
+            highlightCircle = selection.append("circle")
+                .attr("class", "hover-highlight")
+                .attr("fill", "white")
+                .attr("r", 3)
+                .attr("stroke", "black")
+                .attr("stroke-width", 2)
+                .style("display", "none");
+        }
+
+        hoverGroup
+            .selectAll(".hoverPoint")
+            .data(series.flatMap(s => s
+                .filter(d => d[0] !== d[1]) // only keep valid values
+                .map(d => ({ ...d, key: s.key }))))
+            .join("circle")
+            .attr("class", "hoverPoint")
+            .attr("cx", (d, i) => xScale(d.data[0]))
+            .attr("cy", (d) => yScale(0))
+            .style("opacity", 0)
+            .transition()
+            .duration(1000)
+            .delay(300)
+            .attr("cy", (d) => yScale(d[1]))
+            .attr("r", 11)
+
+        hoverGroup.selectAll(".hoverPoint")
+            .on("mouseover.tooltip", (event, series) => {
+                const dataMap = series.data[1];
+                const original = dataMap.get(series.key);
+                setToolTip_relative_client(original.tooltip, event.pageX, event.pageY, 20);
+                highlightCircle
+                    .attr("cx", xScale(series.data[0]))
+                    .attr("cy", yScale(series[1]))
+                    .style("display", "block");
+            })
+            .on("mouseout.reset", (event, data) => {
+                d3.select("#tooltip").remove();
+                d3.select(".hover-highlight")
+                    .style("display", "none");
+            })
+
+        /**
+         * Draw legends
+         */
     }
 
     function drawAxis(selection) {
+        if (!d3.select(".x-axis").empty()) return;
+
         yAxis.ticks(10)
 
         // axis
@@ -216,6 +274,34 @@ function stackedArea() {
             .attr("stroke", "grey")
             .style("stroke-width", 0.7)
 
+    }
+
+    /**
+     * Renders the tooltip relative to given position
+     * ----------------------------------------------
+     * @param {string} tooltip 
+     * @param {number} left px - clientX
+     * @param {number} top px - clientY
+     * @param {number} offset px - relative to client
+     */
+    function setToolTip_relative_client(tooltip, left, top, offset) {
+        d3.select("body")
+            .append("div")
+            .attr("id", "tooltip")
+            .style("height", "max-content")
+            .style("width", "max-content")
+            .style("left", `${left + offset}px`)
+            .style("top", `${top + offset}px`)
+            .style("position", "absolute")
+            .style("background", "white")
+            .style("opacity", "0")
+            .html(tooltip)
+            .transition()
+            .duration(100)
+            .delay(50)
+            .style("left", `${left + offset}px`)
+            .style("top", `${top + offset}px`)
+            .style("opacity", "1")
     }
 
     function validate() {

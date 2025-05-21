@@ -18,7 +18,7 @@
                 <span id="header-meta">COS300045 - Assignment 3</span>
             </div>
             <a href="https://github.com/JQTPeng/data-viz-cos30045">
-                <img width="25px" src="./resources/icons/github-mark/github-mark-white.svg" alt="github-icon"/>
+                <img width="25px" src="./resources/icons/github-mark/github-mark-white.svg" alt="github-icon" />
             </a>
         </div>
     </header>
@@ -31,18 +31,17 @@
                     <div class="chart-supported-filter">
                         <span class="chart-tag choropleth-tag">choropleth</span>
                         <span class="chart-tag stackedArea-tag">stacked area</span>
-                        <span class="chart-tag line-tag">line</span>
                     </div>
-                    <label for="vehicle1">
-                        <input type="checkbox" id="gender" name="gender" value="Total">
+                    <label for="gender">
+                        <input type="radio" id="gender" name="gender" value="Total">
                         Total
                     </label><br>
-                    <label for="vehicle2">
-                        <input type="checkbox" id="gender" name="gender" value="Male">
+                    <label for="gender">
+                        <input type="radio" id="gender" name="gender" value="Male">
                         Male
                     </label><br>
-                    <label for="vehicle3">
-                        <input type="checkbox" id="gender" name="gender" value="Female">
+                    <label for="gender">
+                        <input type="radio" id="gender" name="gender" value="Female">
                         Female
                     </label><br>
                 </fieldset>
@@ -50,24 +49,22 @@
                     <legend>Year</legend>
                     <div class="chart-supported-filter">
                         <span class="chart-tag choropleth-tag">choropleth</span>
-                        <span class="chart-tag stackedArea-tag">stacked area</span>
-                        <span class="chart-tag line-tag">line</span>
                     </div>
                     <div class="year-inputs">
                         <p>2015</p>
                         <input type="range" name="yearSlider" id="yearSlider" value="2015" min="2015" max="2022"
                             step="1" value="2015" />
                         <p>2022</p>
-                        <input type="text" id="yearText" value="2015" />
+                        <input type="text" name="yearText" id="yearText" value="2015" />
                     </div>
                 </fieldset>
-                <fieldset id="causes-field" class="causes-field">
+                <!-- <fieldset id="causes-field" class="causes-field">
                     <legend>Cause</legend>
                     <label for="vehicle3">
                         <input type="checkbox" id="cause" name="cause" value="All" checked>
                         All
                     </label><br>
-                </fieldset>
+                </fieldset> -->
                 </field>
             </form>
         </div>
@@ -95,7 +92,7 @@
             <div id="stackedArea" class="chart">
                 <div class="chart-info">
                     <h2>
-                        Australia Death/Birth Rate (2015-2022)
+                        Australia Proportion of Mortality Cause (2016-2022)
                         <span class="chart-tag stackedArea-tag">stacked area</span>
                     </h2>
                     <p><strong>Measure</strong>: per 100,000 inhabitants; <strong>Sex</strong>: Total
@@ -105,8 +102,18 @@
             <div id="linechart" class="chart">
                 <div class="chart-info">
                     <h2>
-                        Australia Birth and Mortality Rates per 100,000 People (2015–2022)
+                        Australia Mortality and Birth Rate (2015–2022)
                         <span class="chart-tag line-tag">line</span>
+                    </h2>
+                    <p><strong>Measure</strong>: per 100,000 inhabitants; <strong>Sex</strong>: Total
+                    </p>
+                </div>
+            </div>
+            <div id="bubblechart" class="chart">
+                <div class="chart-info">
+                    <h2>
+                        Australia Causes of Mortality <span id="chart-year">2015</span>
+                        <span class="chart-tag bubble-tag">bubble</span>
                     </h2>
                     <p><strong>Measure</strong>: per 100,000 inhabitants; <strong>Sex</strong>: Total
                     </p>
