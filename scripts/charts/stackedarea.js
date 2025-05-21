@@ -25,7 +25,7 @@ function stackedArea() {
 
     let width = 1000;
     let height = 500;
-    let margin = { top: 50, left: 50, bottom: 50, right: 150 }
+    let margin = { top: 50, left: 50, bottom: 50, right: 300 }
 
     // Data
     let data = [];
@@ -81,8 +81,8 @@ function stackedArea() {
             .domain(categories)
             .range(colorRange);
 
-        svg.call(drawContent);
         svg.call(drawAxis);
+        svg.call(drawContent);
 
         let legend = d3.select("#legend-group");
         if (legend.empty()) {
@@ -185,17 +185,6 @@ function stackedArea() {
             hoverGroup = selection.append("g").attr("class", "hover-group");
         }
 
-        let highlightCircle = selection.select(".hover-highlight");
-        if (highlightCircle.empty()) {
-            highlightCircle = selection.append("circle")
-                .attr("class", "hover-highlight")
-                .attr("fill", "white")
-                .attr("r", 3)
-                .attr("stroke", "black")
-                .attr("stroke-width", 2)
-                .style("display", "none");
-        }
-
         hoverGroup
             .selectAll(".hoverPoint")
             .data(series.flatMap(s => s
@@ -205,27 +194,25 @@ function stackedArea() {
             .attr("class", "hoverPoint")
             .attr("cx", (d, i) => xScale(d.data[0]))
             .attr("cy", (d) => yScale(0))
-            .style("opacity", 0)
+            .style("fill", (d) => color(d.key))
             .transition()
             .duration(1000)
             .delay(300)
             .attr("cy", (d) => yScale(d[1]))
-            .attr("r", 11)
+            .attr("r", 3)
 
         hoverGroup.selectAll(".hoverPoint")
             .on("mouseover.tooltip", (event, series) => {
                 const dataMap = series.data[1];
                 const original = dataMap.get(series.key);
                 setToolTip_relative_client(original.tooltip, event.pageX, event.pageY, 20);
-                highlightCircle
-                    .attr("cx", xScale(series.data[0]))
-                    .attr("cy", yScale(series[1]))
-                    .style("display", "block");
+                d3.select(event.target)
+                    .attr("r", 4);
             })
             .on("mouseout.reset", (event, data) => {
                 d3.select("#tooltip").remove();
-                d3.select(".hover-highlight")
-                    .style("display", "none");
+                d3.select(event.target)
+                    .attr("r", 3);
             })
 
         /**
@@ -236,7 +223,7 @@ function stackedArea() {
     function drawAxis(selection) {
         if (!d3.select(".x-axis").empty()) return;
 
-        yAxis.ticks(10)
+        yAxis.ticks(5)
 
         // axis
         selection.append("g")

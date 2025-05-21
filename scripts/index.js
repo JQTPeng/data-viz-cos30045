@@ -160,10 +160,10 @@ function stackedArea_CausesOfDeath(dataset) {
     const myChart = stackedArea();
     myChart
         .width(700)
-        .height(400)
+        .height(350)
         .data(cleanedData)
-        .categories(d3.union(cleanedData.map(d => d["Cause Code"])))
-        .seriesIndex(d3.index(cleanedData, d => d.year, d => d["Cause Code"]))
+        .categories(d3.union(cleanedData.map(d => d["Cause"])))
+        .seriesIndex(d3.index(cleanedData, d => d.year, d => d["Cause"]))
         .xDomain(xDomain)(selection);
 
     return {
@@ -194,7 +194,7 @@ function death_birth_line_chart(datasets) {
     const myChart = linechart();
     myChart
         .width(700)
-        .height(400)
+        .height(350)
         .datasets(datasets)
         (selection)
 
@@ -283,6 +283,7 @@ function setFilter() {
     setDefault();
     setEvents();
 }
+
 window.onload = async () => {
     datasetAPI = await Datasets();
     myChoropleth = mortality_choropleth(datasetAPI.choropleth(filterState.year, filterState.gender));
