@@ -64,7 +64,6 @@ function linechart() {
      * @param {d3.selection} selection 
      */
     function chart(selection) {
-        console.log(datasets[0].values);
         let svg = d3.select(selection).select("svg");
         if (svg.empty()) {
             svg = d3.select(selection)

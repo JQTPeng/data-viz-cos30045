@@ -1,36 +1,10 @@
-// TODO: Add tickbox male, female, total
-// TODO: Add slider
-// TODO: Parse datasets to json file
-
-// const form = document.getElementById("FilterForm");
-// form.addEventListener('change', (event) => {
-//     const filter = {
-//         gender: "Total",
-//         year: 2015,
-//         cause: "All"
-//     }
-//     const name = event.target.name;
-//     const value = event.target.value;
-
-//     // validate gender checkbox
-//     if (name === "gender") {
-
-//     }
-
-//     if (name === "yearSlider") {
-//         mortality_choropleth()
-//     }
-//     console.log(name + " " + value)
-// })
-
-
 import { choropleth } from "./charts/choropleth.js";
 import { stackedArea } from "./charts/stackedarea.js";
 import { linechart } from "./charts/linechart.js";
 
 /**
- * CSV processing for simple data structure is more
- * efficient than json in terms of load time and size
+ * Setup the datasets with the right structure
+ * and values for each chart in the beginning
  */
 async function Datasets() {
     const main_total_causes = await d3.csv("./resources/data/OECD_Cause_of_Mortality.csv");
@@ -57,6 +31,11 @@ async function Datasets() {
         d.name = d.country;
         delete d.country;
         d.value = +d.value;
+
+        if (d.Cause === "Codes for special purposes: COVID-19") {
+            d.Cause = "COVID-19";
+        }
+
         d.tooltip = `
             <div id="tooltip-header">
                 <span id="tooltip-header-name">${d.Cause}</span>
@@ -117,7 +96,6 @@ async function Datasets() {
  * Instantiate a choropleth map visualization for mortality data.
  * - Data (e.g., csv) has been cleaned beforehand to reduce file size
  * - Preprocessing on initial load for sharing
- * @description Mortality per 100,000 inhabitants - World Choropleth
 */
 function mortality_choropleth(dataset) {
     const selection = "#choropleth";
@@ -151,7 +129,6 @@ function mortality_choropleth(dataset) {
 function stackedArea_CausesOfDeath(dataset) {
     let cleanedData = [];
     const xDomain = Array.from(new Set(dataset.map(d => d.year))).sort((a, b) => a - b);
-    console.log(xDomain);
     xDomain.forEach((year) => {
         cleanedData.push(...(dataset.filter(d => d.year == year)).sort((a, b) => b.value - a.value).slice(0, 6));
     })
@@ -168,7 +145,6 @@ function stackedArea_CausesOfDeath(dataset) {
 
     return {
         update(newDataset) {
-            console.log(newDataset);
             let cleanedData = [];
             const xDomain = Array.from(new Set(newDataset.map(d => d.year))).sort((a, b) => a - b);
             xDomain.forEach((year) => {
@@ -219,6 +195,10 @@ let myStackedArea = null;
 let myLinechart = null;
 let myBubbleChart = null;
 
+
+/**
+ * Sets default filter and events 
+ */
 function setFilter() {
     const filter = document.getElementById("FilterForm");
     const genderRadios = filter.elements['gender'];
