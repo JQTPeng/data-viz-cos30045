@@ -55,6 +55,7 @@ function linechart() {
         { category: "A", values: raw1 },
         { category: "B", values: raw2 }
     ];
+    let categories = [];
 
     /**
      * Render Chart
@@ -159,8 +160,10 @@ function linechart() {
                 .attr("class", "line-points");
         }
 
+        const points = datasets.flatMap(d => d.values.map(v => ({ ...v, category: d.category })));
+
         selection.selectAll(".line-point")
-            .data(datasets.flatMap(d => d.values.map(v => ({ ...v, category: d.category }))))
+            .data(points)
             .join("circle")
             .attr("class", "line-point")
             .attr("cx", d => xScale(d.year))
@@ -179,6 +182,17 @@ function linechart() {
                     .attr("r", 4);
             })
 
+        const txt_x = d3.max(datasets[0].values, d => d.year);
+        selection.selectAll(".legend-text")
+            .data(datasets)
+            .join("text")
+            .attr("class", "legend-text")
+            .attr("x", xScale(txt_x) + 20)
+            .attr("y", (d, i) => {
+                const obj = d3.group(datasets[i].values, d => d.year == txt_x).get(true);
+                return yScale(obj[0].value);
+            })
+            .text((d, i) => datasets[i].category);
     }
 
     /**
@@ -251,6 +265,11 @@ function linechart() {
         return chart;
     }
 
+    chart.categories = function (_) {
+        if (!arguments.length) return categories;
+        categories = _;
+        return chart;
+    }
     return chart;
 }
 

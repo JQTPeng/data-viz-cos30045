@@ -172,6 +172,7 @@ function death_birth_line_chart(datasets) {
         .width(700)
         .height(350)
         .datasets(datasets)
+        .categories(["Deaths", "Births"])
         (selection)
 
     return {
