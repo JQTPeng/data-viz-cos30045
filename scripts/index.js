@@ -153,8 +153,8 @@ function stackedArea_CausesOfDeath(dataset) {
 
             myChart
                 .data(cleanedData)
-                .categories(d3.union(cleanedData.map(d => d["Cause Code"])))
-                .seriesIndex(d3.index(cleanedData, d => d.year, d => d["Cause Code"]))
+                .categories(d3.union(cleanedData.map(d => d["Cause"])))
+                .seriesIndex(d3.index(cleanedData, d => d.year, d => d["Cause"]))
                 .xDomain(xDomain)
                 (selection);
         }
