@@ -56,6 +56,8 @@ function choropleth() {
         scale: d3.scaleThreshold()
     };
 
+    let noData_texture = null;
+
     /** e
      * @type {Array<{name: string, year: number, value: number, measure: string, tooltip: string}>}
      * @description An array of the specified object scheme
@@ -71,7 +73,7 @@ function choropleth() {
     * Use this function for enter, updates and exits.
     * @param {HTMLElement} selection - The D3 selection/HTML (e.g., a div or another DOM element) where the chart will be rendered.
     */
-   async function chart(selection) {
+    async function chart(selection) {
         svg = d3.select(selection).select("svg");
         if (svg.empty()) {
             svg = d3.select(selection)
@@ -95,7 +97,7 @@ function choropleth() {
                 .attr("id", "chartHeader")
                 .attr("width", width)
                 .attr("height", 200)
-                .style("stroke", );
+                .style("stroke",);
         }
 
         /**
@@ -237,11 +239,21 @@ function choropleth() {
     * @param {d3.Selection} selection - A D3 selection of SVG elements.
     */
     function setStyles(selection) {
+        const svg = d3.select(".chart-canvas")
+
+        noData_texture = textures
+            .circles()
+            .radius(1.5)
+            .size(7)
+            .fill("#000")
+            .background("#ccc");
+
+        svg.call(noData_texture);
+
         selection
             .style("fill", (d) => {
                 let value = d.properties.value;
-                if (value) { return colorScale(value); }
-                return colorConfig.no_data;
+                return value ? colorScale(value) : noData_texture.url();
             })
             .style("stroke", colorConfig.border)
             .style("stroke-width", 0.5)
@@ -378,13 +390,14 @@ function choropleth() {
         let legend_colors = legend_group.select("#thresholdColors");
         let legend_texts = legend_group.select("#thresholdTexts");
 
+        console.log(colorRange);
         legend_colors // thresholds colors
             .selectAll("rect")
             .data(colorRange)
             .join("rect")
             .attr("width", threshold_width)
             .attr("height", threshold_height)
-            .attr("fill", (d) => d)
+            .attr("fill", (d) => d === "#808080" ? noData_texture.url() : d)
             .attr("x", (d, i) => padding * 2)
             .attr("y", (d, i) => height - padding * 2 - (colorRange.length - i) * threshold_height + 2);
 
