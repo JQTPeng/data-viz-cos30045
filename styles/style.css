@@ -258,3 +258,32 @@ legend {
 #tooltip-content-measure {
     font-size: 0.8em;
 }
+
+.aside-section {
+    padding: 0 0 20px 0;
+    margin: 0 0 20px 0;
+    width: min-content;
+    min-width: 300px;
+}
+
+.aside-section h2 {
+    padding: 0 0 20px 0;
+    margin: 20px 0 20px 0;
+    border-bottom: 1px solid #ccc;
+}
+
+.aside-links {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-evenly;
+}
+
+.aside-links a {
+    text-decoration: none;
+    color: black;
+    line-height: 30px;
+}
+
+.aside-links a:hover {
+    text-decoration: underline;
+}
