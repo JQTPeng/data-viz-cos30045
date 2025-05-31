@@ -1,6 +1,7 @@
 import { choropleth } from "./charts/choropleth.js";
 import { stackedArea } from "./charts/stackedarea.js";
 import { linechart } from "./charts/linechart.js";
+import { bubblechart } from "./charts/bubblechart.js";
 
 /**
  * Setup the datasets with the right structure
@@ -265,11 +266,26 @@ function setFilter() {
     setEvents();
 }
 
+function render_bubble_chart(dataset) {
+    const selection = "#bubblechart";
+    const myBubbleChart = bubblechart()
+        .width(700)
+        .height(350);
+
+    if (dataset) {
+        myBubbleChart.dataset(dataset);
+    }
+
+    myBubbleChart(d3.select(selection)); // <-- pass d3 selection, not string
+
+    return myBubbleChart;
+}
+
 window.onload = async () => {
     datasetAPI = await Datasets();
     myChoropleth = mortality_choropleth(datasetAPI.choropleth(filterState.year, filterState.gender));
     myStackedArea = stackedArea_CausesOfDeath(datasetAPI.stackedArea(filterState.gender));
     myLinechart = death_birth_line_chart(datasetAPI.lineChart());
-
+    myBubbleChart = render_bubble_chart(datasetAPI.stackedArea("Total"));
     setFilter();
 }
