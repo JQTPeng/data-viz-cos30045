@@ -44,24 +44,21 @@ export function bubblechart() {
         .sort((a, b) => b.value - a.value)
         .slice(0, 50);
 
-      // Radius scale
       const radiusScale = d3.scaleSqrt()
         .domain([0, d3.max(Data, d => d.value)])
         .range([8, 40]);
 
-      // Color scale
-      const colorScale = d3.scaleOrdinal(d3.schemeTableau10);
+      const colorRange = ["#003f5c", "#374c80", "#7a5195", "#bc5090", "#ef5675", "#ff764a", "#ffa600"];
+      const colorScale = d3.scaleOrdinal().range(colorRange);
 
-      // Scale radius 75% bigger
       Data.forEach(d => {
         d.r = radiusScale(d.value) * 1.75;
       });
 
-      // Adjust forces: stronger horizontal, weaker vertical
       const simulation = d3.forceSimulation(Data)
         .force("x", d3.forceX(width / 2).strength(0.1))
-        .force("y", d3.forceY(height / 2).strength(0.6))
-        .force("collide", d3.forceCollide(d => d.r + 6))
+        .force("y", d3.forceY(height / 2.2).strength(0.5))
+        .force("collide", d3.forceCollide(d => d.r + 4))
         .stop();
 
       for (let i = 0; i < 300; ++i) simulation.tick();
@@ -116,35 +113,79 @@ export function bubblechart() {
         .style("font-size", d => Math.max(7, d.r / 3) + "px")
         .text(d => truncateText(d.Cause));
 
-      // Legend in bottom right
-      const legendPadding = 20;
-      const legend = svg.append("g")
-        .attr("transform", `translate(${width - legendPadding - 40}, ${height - legendPadding})`)
-        .attr("text-anchor", "end");
+      // Drop shadow filter
+        const defs = svg.append("defs");
+        defs.append("filter")
+        .attr("id", "drop-shadow")
+        .append("feDropShadow")
+        .attr("dx", 1)
+        .attr("dy", 2)
+        .attr("stdDeviation", 2)
+        .attr("flood-color", "black")
+        .attr("flood-opacity", 0.4);
 
-      const sizeLegend = [10, 100, 500];
+        // Legend values
+        const sizeLegend = [20, 50, 200];
 
-      legend.selectAll("circle")
-        .data(sizeLegend)
-        .enter()
-        .append("circle")
-        .attr("cy", d => -radiusScale(d) * 1.75)
-        .attr("cx", 0)
-        .attr("r", d => radiusScale(d) * 1.75)
-        .attr("fill", "none")
-        .attr("stroke", "#333");
+        // Calculate total width based on circle sizes
+        let totalWidth = 20; // initial padding
+        sizeLegend.forEach(d => {
+        totalWidth += radiusScale(d) * 2 + 15; // circle width + spacing
+        });
+        const boxHeight = 100;
 
-      legend.selectAll("text")
-        .data(sizeLegend)
-        .enter()
-        .append("text")
-        .attr("y", d => -2 * radiusScale(d) * 1.75)
-        .attr("x", -5)
-        .attr("dy", "1.3em")
+        // Main legend group
+        const legendGroup = svg.append("g")
+        .attr("id", "legendGroup")
+        .attr("transform", `translate(${10}, ${height - boxHeight - 5})`); // bottom right
+
+        // White background box with shadow (square corners)
+        legendGroup.append("rect")
+        .attr("width", totalWidth)
+        .attr("height", boxHeight)
+        .attr("fill", "white")
+        .attr("filter", "url(#drop-shadow)");
+
+        // Title
+        legendGroup.append("text")
+        .attr("x", 10)
+        .attr("y", 15)
         .style("font-size", "12px")
-        .text(d => `${d}`);
-    });
-  }
+        .style("font-weight", "bold")
+        .style("fill", "gray")
+        .text("Deaths per 100k");
+
+        // Inner group for items
+        const itemsGroup = legendGroup.append("g")
+        .attr("transform", `translate(10, 57)`); // adjust Y position
+
+        let xOffset = 6;
+        sizeLegend.forEach(d => {
+        const r = radiusScale(d);
+
+        const itemGroup = itemsGroup.append("g")
+            .attr("transform", `translate(${xOffset + r}, 0)`); // center circle
+
+        // Circle
+        itemGroup.append("circle")
+            .attr("r", r * 1.75)
+            .attr("cy", 0)
+            .attr("fill", "#f0f0f0")
+            .attr("stroke", "#444");
+
+        // Label inside
+        itemGroup.append("text")
+            .attr("text-anchor", "middle")
+            .attr("y", "0.35em")
+            .style("font-size", r < 10 ? "9px" : "10px")
+            .style("fill", "#000")
+            .style("pointer-events", "none")  // ensures text is not clickable
+            .text(d.toLocaleString());
+
+        xOffset += r * 2 + 12;
+        });
+        });
+        }
 
   chart.width = function (value) {
     if (!arguments.length) return width;
