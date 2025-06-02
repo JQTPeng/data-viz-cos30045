@@ -270,11 +270,13 @@ function render_bubble_chart(dataset) {
     const selection = "#bubblechart";
     const myBubbleChart = bubblechart()
         .width(700)
-        .height(350);
+        .height(350)
+        .dataset(dataset)
+        (selection);
 
-    if (dataset) {
-        myBubbleChart.dataset(dataset);
-    }
+    // if (dataset) {
+    //     myBubbleChart.dataset(dataset);
+    // }
 
     myBubbleChart(d3.select(selection)); // <-- pass d3 selection, not string
 
