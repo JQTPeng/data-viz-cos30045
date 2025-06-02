@@ -104,8 +104,6 @@ function linechart() {
             .x(d => xScale(d.year))
             .y(d => yScale(d.value))
 
-        console.log(datasets);
-
         selection.selectAll(".lines")
             .data(datasets)
             .join("path")

@@ -132,7 +132,6 @@ function choropleth() {
         zoomGroup
             .on("mousedown", () => {
                 if (!draggable) return;
-                console.log('down')
                 zoomGroup
                     .classed("grab", false)
                     .classed("grabbing", true)
@@ -390,7 +389,6 @@ function choropleth() {
         let legend_colors = legend_group.select("#thresholdColors");
         let legend_texts = legend_group.select("#thresholdTexts");
 
-        console.log(colorRange);
         legend_colors // thresholds colors
             .selectAll("rect")
             .data(colorRange)
