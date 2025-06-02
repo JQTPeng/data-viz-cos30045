@@ -188,6 +188,10 @@ function death_birth_line_chart(datasets) {
     }
 }
 
+/**
+ * Instantiate a bubble chart visualization for 
+ * australian mortality causes.
+*/
 function render_bubble_chart(dataset) {
     const selection = "#bubblechart";
     const myChart = bubblechart();
@@ -233,6 +237,7 @@ function setFilter() {
     const genderRadios = filter.elements['gender'];
     const yearSlider = filter.elements['yearSlider'];
     const yearText = filter.elements['yearText'];
+    const labels = document.querySelectorAll('.chart-year');
 
 
     function setDefault() {
@@ -268,6 +273,9 @@ function setFilter() {
             const year = +e.target.value;
             filterState.year = year;
             yearText.value = year;
+            labels.forEach(el => {
+                el.textContent = filterState.year;
+            });
 
             // Update
             myChoropleth.update(datasetAPI.choropleth(filterState.year, filterState.gender));
@@ -280,6 +288,9 @@ function setFilter() {
             if (+value < +yearSlider.min || +value > +yearSlider.max) return;
             filterState.year = year;
             yearSlider.value = value;
+            labels.forEach(el => {
+                el.textContent = filterState.year;
+            });
 
             // Update
             myChoropleth.update(datasetAPI.choropleth(filterState.year, filter.gender));
