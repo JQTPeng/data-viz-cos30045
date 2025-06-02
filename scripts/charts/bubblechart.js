@@ -1,5 +1,7 @@
 import * as d3 from "https://cdn.jsdelivr.net/npm/d3@7/+esm";
 
+let draggable = false;
+
 export function bubblechart() {
   let width = 900;
   let height = 600;
@@ -9,12 +11,9 @@ export function bubblechart() {
   let sex = "Total";
   let svg = null;
 
-  function truncateText(text, maxLength = 25) {
-    return text.length > maxLength ? text.slice(0, maxLength) + "…" : text;
-  }
+  const radiusScale = d3.scaleSqrt();
 
   function chart(selection) {
-    // Setup containers
     svg = d3.select(selection).select("svg");
     if (svg.empty()) {
       svg = d3.select(selection)
@@ -24,6 +23,10 @@ export function bubblechart() {
         .attr("height", height);
     }
 
+    /**
+    * setup zoom settings and 
+    * cursor interactions for user feedback
+    */
     let zoomGroup = svg.select("#zoomGroup");
     if (zoomGroup.empty()) {
       zoomGroup = svg.append("g")
@@ -32,10 +35,6 @@ export function bubblechart() {
         .classed("grabbing", false);
     }
 
-    /**
-         * setup zoom settings and 
-         * cursor interactions for user feedback
-         */
     const zoom = d3.zoom()
       .scaleExtent([1, 5]) // TODO: need to limit the unbounded panning
       .on("end", () => {
@@ -50,7 +49,6 @@ export function bubblechart() {
     zoomGroup
       .on("mousedown", () => {
         if (!draggable) return;
-        console.log('down')
         zoomGroup
           .classed("grab", false)
           .classed("grabbing", true)
@@ -83,13 +81,15 @@ export function bubblechart() {
         .attr("id", "bubbleArea");
     }
 
+    bubbleGroup.selectAll("*").remove();
+    
     if (!dataset || dataset.length === 0) {
       bubbleGroup.append("text")
         .attr("x", width / 2)
         .attr("y", height / 2)
         .attr("text-anchor", "middle")
         .text("No data available");
-      return;
+        return;
     }
 
     /**
@@ -107,7 +107,7 @@ export function bubblechart() {
       .sort((a, b) => b.value - a.value)
       .slice(0, 50);
 
-    const radiusScale = d3.scaleSqrt()
+    radiusScale
       .domain([0, d3.max(Data, d => d.value)])
       .range([8, 40]);
 
@@ -141,14 +141,27 @@ export function bubblechart() {
       .style("opacity", 0);
 
     bubbleGroup.selectAll("circle")
-      .data(Data)
-      .enter()
-      .append("circle")
-      .attr("cx", d => d.x)
-      .attr("cy", d => d.y)
-      .attr("r", d => d.r)
-      .attr("fill", (d, i) => colorScale(i))
-      .attr("opacity", 0.75)
+      .data(Data, d => d.id || d.Cause) // Add key function if possible
+      .join(
+        enter => enter.append("circle")
+          .attr("fill", (d, i) => colorScale(i))
+          .attr("opacity", 0.75)
+          .attr("cx", d => d.x)
+          .attr("cy", d => d.y)
+          .attr("r", 0) // Start at radius 0
+          .call(enter => enter.transition()
+            .duration(1000)
+            .attr("r", d => d.r)
+          ),
+
+        update => update
+          .call(update => update.transition()
+            .duration(1000)
+            .attr("cx", d => d.x)
+            .attr("cy", d => d.y)
+            .attr("r", d => d.r)
+          )
+      )
       .on("mouseover", (event, d) => {
         tooltip
           .style("opacity", 1)
@@ -167,86 +180,132 @@ export function bubblechart() {
         d3.select(event.currentTarget).attr("stroke", null);
       });
 
-    bubbleGroup.selectAll("text.label")
+    // bubbleGroup.selectAll("text.label")
+    //   .data(Data)
+    //   .join("text")
+    //   .attr("class", "label")
+    //   .attr("x", d => d.x)
+    //   .attr("y", d => d.y)
+    //   .attr("text-anchor", "middle")
+    //   .attr("dy", ".35em")
+    //   .attr("fill", "black")
+    //   .style("font-size", d => Math.max(7, d.r / 5) + "px")
+    //   .style("opacity", 0) // start hidden
+    //   .transition()
+    //   .delay(500) // wait 0.5 seconds
+    //   .duration(500) // fade in over 0.5 seconds
+    //   .style("opacity", 1)
+    //   .selection()
+    //   .text(d => wrapText(d.Cause));
+
+    const labels = bubbleGroup.selectAll("text.label")
       .data(Data)
-      .enter()
-      .append("text")
+      .join("text")
       .attr("class", "label")
       .attr("x", d => d.x)
       .attr("y", d => d.y)
       .attr("text-anchor", "middle")
-      .attr("dy", ".35em")
       .attr("fill", "black")
-      .style("font-size", d => Math.max(7, d.r / 3) + "px")
-      .text(d => truncateText(d.Cause));
+      .style("font-size", d => Math.max(7, d.r / 5) + "px")
+      .style("opacity", 0) // start hidden
+      .transition()
+      .delay(500)
+      .duration(500)
+      .style("opacity", 1)
+      .selection();
 
-    /**
-     * Legend Setup
-     * Circle Scale
-     */
-    const defs = svg.append("defs");
-    defs.append("filter")
-      .attr("id", "drop-shadow")
-      .append("feDropShadow")
-      .attr("dx", 1)
-      .attr("dy", 2)
-      .attr("stdDeviation", 2)
-      .attr("flood-color", "black")
-      .attr("flood-opacity", 0.4);
+    // Split and append tspans
+    labels.each(function (d) {
+      const word = truncateText(d.Cause);
+      const words = word.trim().split(/\s+/); // split into words
+      const fontSize = Math.max(7, d.r / 5);
+      d3.select(this).selectAll("tspan")
+        .data(words)
+        .enter()
+        .append("tspan")
+        .attr("x", d3.select(this).attr("x")) // align each line horizontally
+        .attr("dy", (w, i) => i === 0 ? 0 : fontSize + 1) // stack lines
+        .text(w => w);
+    });
+
+    svg.call(setLegendScale);
+    svg.call(zoom);
+  }
+
+  function truncateText(text, maxLength = 25) {
+    return text.length > maxLength ? text.slice(0, maxLength) + "…" : text;
+  }
+
+  function setLegendScale(svg) {
+    let defs = svg.select("#drop-shadow");
+    if (defs.empty()) {
+      defs = svg.append("defs")
+        .attr("id", "bubbleDefs");
+
+      defs.append("filter")
+        .attr("id", "drop-shadow")
+        .append("feDropShadow")
+        .attr("dx", 1)
+        .attr("dy", 2)
+        .attr("stdDeviation", 2)
+        .attr("flood-color", "black")
+        .attr("flood-opacity", 0.4);
+    }
 
     const sizeLegend = [20, 50, 200];
     let totalWidth = 20; // initial padding
     sizeLegend.forEach(d => {
-      totalWidth += radiusScale(d) * 2 + 15; // circle width + spacing
+      totalWidth += radiusScale(d) * 2 + 20; // circle width + spacing
     });
-    const boxHeight = 100;
+    const boxHeight = 150;
 
-    const legendGroup = svg.append("g")
-      .attr("id", "legendGroup")
-      .attr("transform", `translate(${10}, ${height - boxHeight - 5})`); // bottom right
+    let legendGroup = svg.select("#legendGroup");
+    if (legendGroup.empty()) {
+      legendGroup = svg.append("g")
+        .attr("id", "legendGroup")
+        .attr("transform", `translate(${10}, ${height - boxHeight - 5})`); // bottom right
 
-    legendGroup.append("rect")
-      .attr("width", totalWidth)
-      .attr("height", boxHeight)
-      .attr("fill", "white")
-      .attr("filter", "url(#drop-shadow)");
+      legendGroup.append("rect")
+        .attr("width", totalWidth)
+        .attr("height", boxHeight)
+        .attr("fill", "white")
+        .attr("filter", "url(#drop-shadow)");
 
-    legendGroup.append("text") // Title
-      .attr("x", 10)
-      .attr("y", 15)
-      .style("font-size", "12px")
-      .style("font-weight", "bold")
-      .style("fill", "gray")
-      .text("Deaths per 100k");
+      legendGroup.append("text") // Title
+        .attr("x", 10)
+        .attr("y", 15)
+        .style("font-size", "12px")
+        .style("font-weight", "bold")
+        .style("fill", "gray")
+        .text("Deaths per 100k");
 
-    const itemsGroup = legendGroup.append("g") // Inner group for items
-      .attr("transform", `translate(10, 57)`); // adjust Y position
+      const itemsGroup = legendGroup.append("g") // Inner group for items
+        .attr("transform", `translate(10, 57)`); // adjust Y position
 
-    let xOffset = 6;
-    sizeLegend.forEach(d => {
-      const r = radiusScale(d);
+      let xOffset = 6;
+      sizeLegend.forEach(d => {
+        const r = radiusScale(d);
 
-      const itemGroup = itemsGroup.append("g")
-        .attr("transform", `translate(${xOffset + r}, 0)`); // center circle
+        const itemGroup = itemsGroup.append("g")
+          .attr("transform", `translate(${xOffset + r}, 20)`); // center circle
 
-      itemGroup.append("circle") // Circle scale
-        .attr("r", r * 1.75)
-        .attr("cy", 0)
-        .attr("fill", "#f0f0f0")
-        .attr("stroke", "#444");
+        itemGroup.append("circle") // Circle scale
+          .attr("r", r * 1.75)
+          .attr("cy", 0)
+          .attr("fill", "#f0f0f0")
+          .attr("stroke", "#444");
 
-      itemGroup.append("text") // Circle Label
-        .attr("text-anchor", "middle")
-        .attr("y", "0.35em")
-        .style("font-size", r < 10 ? "9px" : "10px")
-        .style("fill", "#000")
-        .style("pointer-events", "none")  // ensures text is not clickable
-        .text(d.toLocaleString());
+        itemGroup.append("text") // Circle Label
+          .attr("text-anchor", "middle")
+          .attr("y", "0.35em")
+          .style("font-size", r < 10 ? "9px" : "10px")
+          .style("fill", "#000")
+          .style("pointer-events", "none")  // ensures text is not clickable
+          .text(d.toLocaleString());
 
-      xOffset += r * 2 + 12;
-    });
-
-    svg.call(zoom);
+        xOffset += r * 2 + 12;
+      });
+    }
   }
 
   chart.width = function (value) {

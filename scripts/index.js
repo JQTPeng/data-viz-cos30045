@@ -89,6 +89,11 @@ async function Datasets() {
                 { category: "Mortality", values: mortality.sort((a, b) => +a.year - +b.year) },
                 { category: "Birth", values: d3.group(birthrates, d => +d.year >= 2015 && +d.year <= 2022).get(true) }
             ];
+        },
+        bubbleChart(year, gender) {
+            const data = d3.group(aus_main_causes, d => d.sex === gender && +d.year == +year).get(true)
+            console.log(data);
+            return data;
         }
     }
 }
@@ -183,6 +188,28 @@ function death_birth_line_chart(datasets) {
     }
 }
 
+function render_bubble_chart(dataset) {
+    const selection = "#bubblechart";
+    const myChart = bubblechart();
+    myChart
+        .width(700)
+        .height(350)
+        .dataset(dataset)
+        (selection);
+
+    // if (dataset) {
+    //     myBubbleChart.dataset(dataset);
+    // }
+
+    // myBubbleChart(d3.select(selection)); // <-- pass d3 selection, not string
+
+    return {
+        update(newDataset) {
+            myChart.dataset(newDataset)(selection);
+        }
+    };
+}
+
 /**
  * Global Instances
  */
@@ -232,6 +259,7 @@ function setFilter() {
                 // Update
                 myChoropleth.update(datasetAPI.choropleth(filterState.year, filterState.gender));
                 myStackedArea.update(datasetAPI.stackedArea(filterState.gender));
+                myBubbleChart.update(datasetAPI.bubbleChart(filterState.year, filterState.gender));
             });
         })
 
@@ -239,13 +267,11 @@ function setFilter() {
         yearSlider.addEventListener("input", (e) => {
             const year = +e.target.value;
             filterState.year = year;
+            yearText.value = year;
 
             // Update
             myChoropleth.update(datasetAPI.choropleth(filterState.year, filterState.gender));
-
-            // UI Update
-            yearText.value = year;
-
+            myBubbleChart.update(datasetAPI.bubbleChart(filterState.year, filterState.gender));
         })
 
         // Year Text Input
@@ -253,12 +279,11 @@ function setFilter() {
             const value = e.target.value;
             if (+value < +yearSlider.min || +value > +yearSlider.max) return;
             filterState.year = year;
+            yearSlider.value = value;
 
             // Update
             myChoropleth.update(datasetAPI.choropleth(filterState.year, filter.gender));
-
-            // UI Update
-            yearSlider.value = value;
+            myBubbleChart.update(datasetAPI.bubbleChart(filterState.year, filterState.gender));
         })
     }
 
@@ -266,28 +291,11 @@ function setFilter() {
     setEvents();
 }
 
-function render_bubble_chart(dataset) {
-    const selection = "#bubblechart";
-    const myBubbleChart = bubblechart()
-        .width(700)
-        .height(350)
-        .dataset(dataset)
-        (selection);
-
-    // if (dataset) {
-    //     myBubbleChart.dataset(dataset);
-    // }
-
-    myBubbleChart(d3.select(selection)); // <-- pass d3 selection, not string
-
-    return myBubbleChart;
-}
-
 window.onload = async () => {
     datasetAPI = await Datasets();
     myChoropleth = mortality_choropleth(datasetAPI.choropleth(filterState.year, filterState.gender));
     myStackedArea = stackedArea_CausesOfDeath(datasetAPI.stackedArea(filterState.gender));
     myLinechart = death_birth_line_chart(datasetAPI.lineChart());
-    myBubbleChart = render_bubble_chart(datasetAPI.stackedArea("Total"));
+    myBubbleChart = render_bubble_chart(datasetAPI.bubbleChart(filterState.year, filterState.gender));
     setFilter();
 }
