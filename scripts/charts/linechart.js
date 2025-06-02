@@ -104,6 +104,8 @@ function linechart() {
             .x(d => xScale(d.year))
             .y(d => yScale(d.value))
 
+        console.log(datasets);
+
         selection.selectAll(".lines")
             .data(datasets)
             .join("path")
@@ -111,7 +113,8 @@ function linechart() {
             .attr("d", d => line(d.values))
             .attr("fill", "none")
             .attr("stroke", d => colorScale(d.category))
-            .attr("stroke-width", 2);
+            .attr("stroke-width", 2)
+            .style("stroke-dasharray", (d) => d.category === "Birth" ? "5,5" : "none");
 
         /**
          * Draw Axis
