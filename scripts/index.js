@@ -218,7 +218,7 @@ function render_bubble_chart(dataset) {
  * Global Instances
  */
 const filterState = {
-    year: 2015,
+    year: 2022,
     gender: "Total",
 };
 
@@ -238,6 +238,7 @@ function setFilter() {
     const yearSlider = filter.elements['yearSlider'];
     const yearText = filter.elements['yearText'];
     const labels = document.querySelectorAll('.chart-year');
+    const label_gender = document.querySelectorAll('.chart-gender');
 
 
     function setDefault() {
@@ -260,6 +261,9 @@ function setFilter() {
             radio.addEventListener("change", (e) => {
                 const gender = e.target.value;
                 filterState.gender = gender;
+                label_gender.forEach(el => {
+                    el.textContent = filterState.gender;
+                })
 
                 // Update
                 myChoropleth.update(datasetAPI.choropleth(filterState.year, filterState.gender));

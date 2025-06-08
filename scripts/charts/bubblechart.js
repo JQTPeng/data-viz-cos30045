@@ -88,7 +88,7 @@ export function bubblechart() {
         .attr("x", width / 2)
         .attr("y", height / 2)
         .attr("text-anchor", "middle")
-        .text("No data available");
+        .text("No data available - change slider");
         return;
     }
 
