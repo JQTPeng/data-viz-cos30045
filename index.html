@@ -72,12 +72,33 @@
         </div>
     </section>
     <main id="main" class="layout-body-main"> <!-- my charts -->
-        <div id="main-content">
+        <div id="main-content" style="margin-bottom: 100px;">
             <h1 id="artile-title">Australia Causes of Mortality</h1>
             <p class="article-meta">
                 <span class="author">By Matthew De Silva, Jared Teng</span>
                 &bull;
                 <time datetime="2025-05-18">May 18, 2025</time>
+            </p>
+            <p class="article-paragraph">
+                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="article-first-word">W</span>ith
+                the world moving towards to a data-driven world, visualization becomes essential to understand complex
+                patterns,
+                trends and relationships. This project aims to tranform raw data to information that can be consumed by
+                all
+                types of people through an interactive user interface. By leveraging modern web technologies and
+                visualization tools
+                such as D3.js, the project presents data in clear and accessible ways accompanied with dynamic
+                interaction to
+                find hidden trends.
+            </p>
+            <h2>World Mortality Rate Choropleth</h2>
+            <p class="article-paragraph">
+                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;A new interactive choropleth map has been developed to visualize
+                global mortality rates across all
+                countries,
+                offering users a clear and customizable view of death rates per 100,000 people.
+                The tool covers data from 2015 to 2022 and includes filtering options by gender,
+                enabling detailed comparative analysis across time and demographic categories.
             </p>
             <div id="choropleth" class="chart">
                 <div class="chart-info">
@@ -91,6 +112,43 @@
                     </p>
                 </div>
             </div>
+            <p class="article-paragraph">
+                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;With a clean, intuitive interface, the map uses a color gradient to
+                represent mortality intensity—lighter shades for lower rates and darker hues for higher ones.
+                Users can explore patterns year by year and toggle between male, female,
+                or total population data to uncover trends that may be influenced by regional health policies, economic
+                shifts, or demographic changes.
+            </p>
+            <p class="article-paragraph">
+                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;The data underpinning the map is aggregated from a broad range of
+                international health and statistical sources. While the tool does not emphasize specific numbers or
+                rankings, it provides a valuable visual reference for understanding how mortality rates have evolved
+                globally over the selected time period.
+                This map is intended as a foundational resource for those seeking to explore high-level patterns in
+                global health, from researchers and students to policy analysts and public health advocates.
+            </p>
+            <p class="article-paragraph">
+                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;This map is intended as a foundational resource for those seeking to
+                explore high-level patterns in
+                global health, from researchers and students to policy analysts and public health advocates.
+            </p>
+            <h2>Exploring Leading Causes of Mortality in Australia &#40;2016-2022&#41;</h2>
+            <p class="article-paragraph">
+                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;This interactive stacked area chart presents a visual overview of
+                the top 7 leading causes of mortality in Australia from 2016 to 2022. Designed to highlight both
+                long-term health trends and emerging health challenges, the chart enables users to explore how different
+                causes of death have changed over time, with the option to filter the data by gender.
+                The seven causes of death presented - ordered from most to least impactful are:
+            </p>
+            <ol style="font-size: 1.1em; line-height: 25px;">
+                <li>Malignant neoplasms</li>
+                <li>Ischaemic heart diseases</li>
+                <li>Cerebrovascular diseases</li>
+                <li>Dementia</li>
+                <li>Chronic obstructive pulmonary disease (COPD)</li>
+                <li>Diabetes mellitus</li>
+                <li>COVID-19</li>
+            </ol>
             <div id="stackedArea" class="chart">
                 <div class="chart-info">
                     <h2>
@@ -101,6 +159,31 @@
                     </p>
                 </div>
             </div>
+            <p class="article-paragraph">
+                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Each area in the chart corresponds to one of these causes, showing
+                their relative contributions to overall mortality by year. The stacked format allows for easy comparison
+                of both individual trends and total mortality volume.
+            </p>
+            <p class="article-paragraph">
+                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;A notable feature of the chart is the visible emergence of COVID-19
+                in 2021, marking a shift in
+                Australia's
+                health landscape. While COVID-19 appears as the smallest contributor among the top 7, its sudden rise
+                reflects the global health crisis and its impact on mortality statistics during this period.
+            </p>
+            <p class="article-paragraph">
+                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;By interacting with the chart, users can isolate patterns by gender
+                and observe how different causes
+                affected men and women differently over the years. The tool serves as an accessible entry point for
+                understanding public health dynamics in Australia across a seven-year span.
+            </p>
+            <h2>Trends in Mortality and Birth Rates in Australia &#40;2015-2022&#41;</h2>
+            <p class="article-paragraph">
+                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;This line chart illustrates the changing dynamics of Australia’s
+                population by plotting two key indicators side by side: the mortality rate and the birth rate, spanning
+                the years 2015 to 2022. The chart is designed to provide a clear visual comparison between the number of
+                deaths and the number of births per 100,000 people over time.
+            </p>
             <div id="linechart" class="chart">
                 <div class="chart-info">
                     <h2>
@@ -111,6 +194,19 @@
                     </p>
                 </div>
             </div>
+            <p class="article-paragraph">
+                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Throughout the timeline, the chart reflects how various social,
+                health, and economic factors influenced Australia's demographic patterns. For example, a notable feature
+                is the visible uptick in the mortality rate in 2021, coinciding with the rise of COVID-19, while the
+                birth rate demonstrates a generally declining trend across the same period.
+            </p>
+            <h2>Bubble Chart of Mortality Causes in Australia (Filterable by Year and Gender)</h2>
+            <p class="article-paragraph">
+                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;This interactive bubble chart offers a dynamic view of all recorded
+                causes of mortality in Australia, presented in a visual format where each bubble represents a specific
+                cause of death. The size of each bubble corresponds to the number of deaths attributed to that cause in
+                a selected year, providing an at-a-glance sense of scale and impact.
+            </p>
             <div id="bubblechart" class="chart">
                 <div class="chart-info">
                     <h2>
@@ -124,6 +220,29 @@
                     </p>
                 </div>
             </div>
+            <p class="article-paragraph">
+                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;By applying these filters, users can explore how the leading causes
+                of death vary over time and between
+                genders. For example, selecting 2021 with "Male" might reveal a shift in causes related to pandemic
+                impacts,
+                chronic illnesses, or lifestyle-related factors.
+            </p>
+            <p class="article-paragraph">
+                Key Features:
+            </p>
+            <ul style="font-size: 1.1em; line-height: 25px;">
+                <li>
+                    <strong>Zoom &amp; pan:</strong> Allows users to closely examine dense clusters or smaller
+                    categories.
+                </li>
+                <li>
+                    <strong>Tooltips:</strong> Hovering over a bubble reveals detailed information, including the name
+                    of the cause, the exact number of deaths
+                </li>
+                <li>
+                    <strong>Filter controls:</strong> Located beside the chart for quick toggling
+                </li>
+            </ul>
         </div>
     </main>
     <aside class="layout-body-aside">
@@ -143,9 +262,13 @@
         <section class="aside-section">
             <h2>Resources</h2>
             <div class="aside-links">
-                <a href="https://data-explorer.oecd.org/vis?pg=0&bp=true&snb=32&df[ds]=dsDisseminateFinalDMZ&df[id]=DSD_HEALTH_STAT%40DF_COM&df[ag]=OECD.ELS.HD&df[vs]=1.0&dq=.A......_T.STANDARD....&pd=2015%2C&to[TIME_PERIOD]=false&isAvailabilityDisabled=false&tm=mortality" target="_blank">&bull; OECD Data Explorer - Causes of Mortality</a>
-                <a href="https://learning.oreilly.com/library/view/fundamentals-of-data/9781492031079/" target="_blank">&bull; Wilke, C. O. Fundamentals of Data Visualization: A Primer on Making Informative and Compelling Figures.</a>
-                <a href="https://doi.org/10.1201/b17511" target="_blank">&bull; Munzner, T. (2014). Visualization analysis and design. A K Peters/CRC Press. </a>
+                <a href="https://data-explorer.oecd.org/vis?pg=0&bp=true&snb=32&df[ds]=dsDisseminateFinalDMZ&df[id]=DSD_HEALTH_STAT%40DF_COM&df[ag]=OECD.ELS.HD&df[vs]=1.0&dq=.A......_T.STANDARD....&pd=2015%2C&to[TIME_PERIOD]=false&isAvailabilityDisabled=false&tm=mortality"
+                    target="_blank">&bull; OECD Data Explorer - Causes of Mortality</a>
+                <a href="https://learning.oreilly.com/library/view/fundamentals-of-data/9781492031079/"
+                    target="_blank">&bull; Wilke, C. O. Fundamentals of Data Visualization: A Primer on Making
+                    Informative and Compelling Figures.</a>
+                <a href="https://doi.org/10.1201/b17511" target="_blank">&bull; Munzner, T. (2014). Visualization
+                    analysis and design. A K Peters/CRC Press. </a>
             </div>
         </section>
     </aside>
